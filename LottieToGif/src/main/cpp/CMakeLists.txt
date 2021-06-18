@@ -1,0 +1,7 @@
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+add_library(lottie2gif SHARED "" lottietogif.h)
+find_package(ZLIB REQUIRED)
+target_sources(lottie2gif PRIVATE lottie2gif)
+find_library(RLOTTIE_LIBRARY rlottie /usr/lib)
+target_link_libraries(lottie2gif ${ZLIB_LIBRARY} ${RLOTTIE_LIBRARY})
+include_directories(lottie2gif ${ZLIB_INCLUDE_DIR} /usr/local/include /usr/include)
