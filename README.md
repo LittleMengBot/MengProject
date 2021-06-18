@@ -12,7 +12,8 @@ openjdk-11
   Ubuntu:&nbsp;``apt install ffmpeg``  
   centOS:&nbsp;``yum install ffmpeg``
 - 2.&nbsp;使用pip3安装 [you-get](https://www.github.com/soimort/you-get)：  
-``pip3 install you-get``  
+``pip3 install you-get``
+- 3.&nbsp;安装并启动Tor服务。（侦听端口9050）
 ## config.json配置  
 ```
 {  
