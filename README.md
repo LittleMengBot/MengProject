@@ -13,7 +13,7 @@ openjdk-11
   centOS:&nbsp;``yum install ffmpeg``
 - 2.&nbsp;使用pip3安装 [you-get](https://www.github.com/soimort/you-get)：  
 ``pip3 install you-get``
-- 3.&nbsp;安装并启动Tor服务。（侦听端口为9050）
+- 3.&nbsp;安装并启动 [Tor](https://www.torproject.org/)服务。（侦听端口为9050）
 ## config.json配置  
 ```
 {  
