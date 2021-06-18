@@ -14,6 +14,7 @@ repositories {
 }
 
 dependencies {
+
     //tgs -> gif
     implementation(project(":LottieToGif"))
 
