@@ -6,25 +6,27 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Update
 import com.github.kotlintelegrambot.network.fold
-import command.cache.ChromeDriverCache.driver
+import command.cache.ChromeDriverCache
 import command.cache.StatusLock
 import dsl.edit
 import dsl.replyToText
 import kotlinx.coroutines.*
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.OutputType
+import org.openqa.selenium.chrome.ChromeDriver
 
 suspend fun shotWeb(url: String, w: Int, h: Int): ByteArray? {
-    driver!!.manage().window().size = Dimension(w, h)
+    val driver: ChromeDriver = ChromeDriverCache.init() ?: return null
+    driver.manage().window().size = Dimension(w, h)
     withContext(Dispatchers.Default) {
-        driver!!.get(url)
+        driver.get(url)
         delay(3000L)
     }
 
     try {
-        return driver!!.getScreenshotAs(OutputType.BYTES)
+        return driver.getScreenshotAs(OutputType.BYTES)
     }finally {
-        driver!!.quit()
+        driver.quit()
     }
 
 

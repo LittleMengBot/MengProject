@@ -22,7 +22,7 @@ object EnvironmentStatus {
                 println("Please check the config file.");false
             }
             !MusicCache.init() -> false
-            !ChromeDriverCache.init() -> false
+            ChromeDriverCache.init() == null -> false
             !File(configCache!!.python3_path).exists() -> {
                 println("Please install python3.");false
             }
