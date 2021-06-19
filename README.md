@@ -68,7 +68,21 @@ macOS请按照上方流程构建。
 ```
 java -jar xxx.jar
 ```  
-也可配置service文件。
+也可配置service文件，示例：  
+```
+[Unit]
+Description=xxxxxx
+After=network.target
+[Service]
+Type=simple
+WorkingDirectory=xxxxxx
+ExecStart=/usr/bin/java -jar xxx.jar
+Restart=always
+RestartSec=1
+StartLimitInterval=0
+[Install]
+WantedBy=multi-user.target
+```
 ## 注意  
 jar包运行时请确保您已配置好config.json和music.json并放置在jar包同路径下。
 ## 多语言  
