@@ -30,9 +30,14 @@ suspend fun getAudioBytes(key: String): ByteArray? {
     val requestText = RequestStartType(text = key)
     val requestJson = requestAdapter.toJson(requestText)
 
-    val r = NetUtils.sendPost(url = configCache!!.speech_api, method = "task", header = header, requestJson = requestJson)
+    val taskStatus: TaskStatus
 
-    val taskStatus = gsonParser.fromJson(r, TaskStatus::class.java)
+    try {
+        val r = NetUtils.sendPost(url = configCache!!.speech_api, method = "task", header = header, requestJson = requestJson)
+        taskStatus = gsonParser.fromJson(r, TaskStatus::class.java)
+    }catch (e: Exception) {
+        return null
+    }
 
     return if (taskStatus.request_successful) {
         var requestId: String

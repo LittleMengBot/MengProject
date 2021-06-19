@@ -11,6 +11,7 @@ object EnvironmentStatus {
 
     val currentPath = "${System.getProperty("user.dir")}/"
     fun check(): Boolean{
+        println("Current Path： $currentPath")
         val prop = System.getProperty("os.name")
         return when {
             prop.equals("Windows") -> {
