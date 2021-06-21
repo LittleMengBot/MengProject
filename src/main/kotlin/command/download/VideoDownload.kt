@@ -139,9 +139,9 @@ fun downloadCommand(bot: Bot, update: Update, args: List<String>) {
         val videoPath = downloadVideo(videoUrl)
         if (videoPath != null){
             val videoFile = File(videoPath)
-            bot.sendVideo(ChatId.fromId(message.from!!.id), videoFile,
+            bot.sendVideo(ChatId.fromId(message.chat.id), videoFile,
                 replyMarkup = deleteButton(update.message!!.messageId), replyToMessageId = message.messageId)
-            bot.deleteMessage(ChatId.fromId(message.from!!.id), editMessageId)
+            bot.deleteMessage(ChatId.fromId(message.chat.id), editMessageId)
             videoFile.delete()
             StatusLock.freeze(lockCode)
         }else{

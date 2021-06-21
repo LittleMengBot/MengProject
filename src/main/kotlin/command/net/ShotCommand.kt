@@ -89,7 +89,7 @@ suspend fun shotCommand(bot: Bot, update: Update, args: List<String>) {
     if (screenShot != null){
         message.edit(bot, editMessageId, LANG["sending"]!!)
         bot.sendDocument(
-            chatId = ChatId.fromId(message.from!!.id),
+            chatId = ChatId.fromId(message.chat.id),
             fileBytes = screenShot,
             fileName = "shot-${(10000000..99999999).random()}.png",
             replyMarkup = deleteButton(message.from!!.id)
@@ -97,7 +97,7 @@ suspend fun shotCommand(bot: Bot, update: Update, args: List<String>) {
             it.exception?.printStackTrace()
             println(it.errorBody)
         })
-        bot.deleteMessage(chatId = ChatId.fromId(message.from!!.id), messageId = editMessageId)
+        bot.deleteMessage(chatId = ChatId.fromId(message.chat.id), messageId = editMessageId)
         StatusLock.freeze(lockCode)
     }else{
         message.edit(bot, editMessageId, LANG["shot_error"]!!, deleteButton(message.from!!.id))

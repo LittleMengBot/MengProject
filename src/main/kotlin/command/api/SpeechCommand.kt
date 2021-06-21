@@ -77,9 +77,9 @@ suspend fun getSpeechByteArray(bot: Bot, update: Update, args: List<String>) {
         if (result != null) {
             val tempAudio = convertToTemp(result, "audio", ".mp3")
             message.edit(bot, editMessageId, LANG["sending"]!!)
-            bot.deleteMessage(ChatId.fromId(message.from!!.id), editMessageId)
+            bot.deleteMessage(ChatId.fromId(message.chat.id), editMessageId)
             bot.sendAudio(
-                chatId = ChatId.fromId(message.from!!.id), audio = tempAudio,
+                chatId = ChatId.fromId(message.chat.id), audio = tempAudio,
                 title = "$key${(1000..9999).random()}",
                 replyToMessageId = message.messageId, replyMarkup = deleteButton(message.messageId)
             )
