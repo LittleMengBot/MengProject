@@ -19,7 +19,7 @@ object LunarCommand {
         pengZu.insert(4, " ").insert(14, " ")
         var result = LANG["lunar_data_fmt"]!!
         result = result.format(
-            calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),
+            calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE),
             lunar.yearInGanZhi, lunar.yearShengXiao, lunar.monthInChinese, lunar.dayInChinese,
             pengZu.toString(),
             lunar.dayYi.toString().replace(',', '，').replace("[", "").replace("]", "").replace(" ", ""),
