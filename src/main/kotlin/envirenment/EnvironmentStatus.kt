@@ -4,6 +4,7 @@ import ConfigLoader
 import ConfigLoader.configCache
 import command.cache.ChromeDriverCache
 import command.cache.MusicCache
+import command.cache.QRCache
 import dsl.execListener
 import java.io.File
 
@@ -22,6 +23,7 @@ object EnvironmentStatus {
                 println("Please check the config file.");false
             }
             !MusicCache.init() -> false
+            !QRCache.init() -> false
             ChromeDriverCache.init() == null -> false
             !File(configCache!!.python3_path).exists() -> {
                 println("Please install python3.");false

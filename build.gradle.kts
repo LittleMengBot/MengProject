@@ -44,6 +44,11 @@ dependencies {
     implementation (group = "org.apache.logging.log4j", name = "log4j-core", version = "2.1")
     implementation (group = "org.apache.logging.log4j", name = "log4j-slf4j-impl", version = "2.1")
 
+    //qrcode
+    implementation(group = "com.google.zxing", name = "core", version = "3.4.1")
+    implementation(group = "com.google.zxing", name = "javase", version = "3.4.1")
+
+
 
 }
 

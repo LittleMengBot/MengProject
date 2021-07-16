@@ -6,10 +6,7 @@ import com.github.kotlintelegrambot.dispatcher.callbackQuery
 import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.dispatcher.telegramError
 import com.github.kotlintelegrambot.logging.LogLevel
-import command.api.getSpeechByteArray
-import command.api.indiaCommand
-import command.api.meiguoCommand
-import command.api.wikiCommand
+import command.api.*
 import command.download.downloadCommand
 import command.download.getAnimationCommand
 import command.download.getStickerCommand
@@ -64,6 +61,9 @@ fun main() {
             command("tietie") { PeopleCommand.withCommand(bot, this.update, message.text!!) }
             command("zouzou") { PeopleCommand.withCommand(bot, this.update, message.text!!) }
             command("momo") { PeopleCommand.withCommand(bot, this.update, message.text!!) }
+            command("qr") { GlobalScope.launch { qrCommand(bot, this@command.update, args) } }
+            command("replace") { replaceCommand(bot, this@command.update, args) }
+
 
             callbackQuery { GlobalScope.launch { callbackMethod(bot, this@callbackQuery.update) } }
 
