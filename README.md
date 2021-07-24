@@ -112,8 +112,10 @@ jar包运行时请确保您已配置好config.json和music.json并放置在jar�
 - 有bug或者建议请在此处提交issue。
 ## 感谢  
 - [fuel](https://github.com/kittinunf/fuel)  *MIT*
+- [ktor](https://github.com/ktorio/ktor)  *Apache-2.0*
 - [lunar](https://github.com/6tail/lunar-java)  *MIT*
 - [jsoup](https://github.com/jhy/jsoup)  *MIT*
+- [zxing](https://github.com/zxing/zxing)  *Apache-2.0*
 - [rlottie](https://github.com/Samsung/rlottie)  *MIT*  
 - [selenium](https://github.com/SeleniumHQ/selenium)  *Apache-2.0*
 - [moshi-kotlin](https://github.com/square/moshi)  *Apache-2.0*
