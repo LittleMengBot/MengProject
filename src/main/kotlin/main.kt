@@ -6,6 +6,7 @@ import com.github.kotlintelegrambot.dispatcher.callbackQuery
 import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.dispatcher.telegramError
 import com.github.kotlintelegrambot.logging.LogLevel
+import com.github.kotlintelegrambot.webhook
 import command.api.*
 import command.download.downloadCommand
 import command.download.getAnimationCommand
@@ -18,6 +19,13 @@ import command.net.shotCommand
 import command.rawtext.*
 import command.rawtext.LunarCommand.lunarCommand
 import envirenment.EnvironmentStatus
+import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
@@ -37,6 +45,12 @@ fun main() {
         timeout = 30
         logLevel = LogLevel.Error
         token = configCache!!.bot_token
+
+        webhook {
+            url = "${configCache!!.webhook_url}${configCache!!.bot_token}"
+            maxConnections = 50
+            allowedUpdates = listOf("message", "callback_query")
+        }
 
         dispatch {
             command("start") { startCommand(bot, this.update) }
@@ -73,5 +87,23 @@ fun main() {
         }
     }
 
-    bot.startPolling()
+    bot.startWebhook()
+
+    // Please use nginx proxy_pass to hold the webhook post.
+    val env = applicationEngineEnvironment {
+        module {
+            routing {
+                post("/${configCache!!.bot_token}") {
+                    val response = call.receiveText()
+                    bot.processUpdate(response)
+                    call.respond(HttpStatusCode.OK)
+                }
+            }
+        }
+        connector {
+            port = configCache!!.webhook_proxy_port
+        }
+    }
+
+    embeddedServer(Netty, env).start(wait = true)
 }

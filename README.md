@@ -5,6 +5,7 @@ gcc >= 7.5 || clang >= 12.0  （compile required）
 cmake >= 3.13  （compile required）  
 python >= 3.6  
 openjdk-11
+Nginx
 
 ## 环境配置  
 - 1.&nbsp;安装 [ffmpeg](https://www.ffmpeg.org):  
@@ -27,7 +28,9 @@ openjdk-11
 "speech_api": "https://littlemeng-api.herokuapp.com/",
 "python3_path": "/usr/bin/python3",
 "youget_path": "/usr/local/bin/you-get",
-"ffmpeg_path": "/usr/local/bin/ffmpeg"
+"ffmpeg_path": "/usr/local/bin/ffmpeg",
+"webhook_url": "https://www.example.com/",
+"webhook_proxy_port": 5000
 }
 ```
 依次填入。  
@@ -36,6 +39,23 @@ openjdk-11
 - ``bot_token`` -> 从 BotFather 处申请。
 - ``corona_headers`` -> 从[此处](https://rapidapi.com/api-sports/api/covid-193/)申请。  
 - 更改``python3_path``、``youget_path``、``ffmpeg_path``为当前系统对应路径。
+- ``webhook_url`` -> 所要设置的webhook地址。  
+- ``webhook_proxy_port`` -> Nginx反向代理端口。
+
+### Nginx反向代理配置文件示例：
+```
+server {
+    listen              443 ssl;
+    server_name         www.example.com;
+    ssl_certificate     /etc/letsencrypt/live/www.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/www.example.com/privkey.pem;
+
+    location /BOT_TOKEN {
+        proxy_pass http://127.0.0.1:5000/BOT_TOKEN;
+    }
+}
+```
+
 ## music.json配置  
 ```
 {
