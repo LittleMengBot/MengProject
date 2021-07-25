@@ -5,6 +5,7 @@
 #include <png.h>
 #include <fstream>
 #include <cstdio>
+#include <cstring>
 
 struct mem_encode{
     char *buffer;
