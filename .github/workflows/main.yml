@@ -30,6 +30,9 @@ jobs:
       - name: Permission for gradlew
         run: chmod +x gradlew
 
+      - name: "Install libwebp && libpng"
+        run: sudo apt install libwebp-dev libpng-dev
+
       - name: Build with Gradle
         run: |
           ./gradlew jar

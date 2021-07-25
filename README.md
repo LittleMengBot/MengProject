@@ -3,6 +3,8 @@
 Linux Base || macOS x64  
 gcc >= 7.5 || clang >= 12.0  （compile required）  
 cmake >= 3.13  （compile required）  
+libwebp  （compile required）  
+libdev  （compile required）  
 python >= 3.6  
 openjdk-11  
 Nginx
