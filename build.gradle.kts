@@ -14,6 +14,7 @@ repositories {
 }
 
 dependencies {
+
     // jni
     implementation(project(":jni"))
 
