@@ -1,4 +1,4 @@
 
 rootProject.name = "MengProject"
 
-include(":LottieToGif")
+include(":jni")

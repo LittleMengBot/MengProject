@@ -1,5 +1,5 @@
 #include "lottietogif.h"
-#include "jni_GifBuilder.h"
+#include "jni_NativeBuilder.h"
 
 class GifBuilder {
 public:

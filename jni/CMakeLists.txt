@@ -40,4 +40,5 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 include_directories(src/main/include)
-add_subdirectory(src/main/cpp)
+add_subdirectory(src/main/cpp/lottie2gif)
+add_subdirectory(src/main/cpp/webp2png)

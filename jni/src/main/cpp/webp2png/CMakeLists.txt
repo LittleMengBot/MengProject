@@ -1,0 +1,12 @@
+set(CMAKE_CXX_STANDARD 14)
+if (CMAKE_HOST_APPLE)
+    set(MACOS 1)
+endif()
+if(MACOS)
+    include_directories("/usr/local/include")
+    link_directories("/usr/local/lib")
+endif()
+
+add_library(webp2png SHARED "" webptopng.h)
+target_sources(webp2png PRIVATE webp2png)
+target_link_libraries(webp2png -lwebp -lpng)

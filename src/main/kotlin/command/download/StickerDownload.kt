@@ -8,16 +8,13 @@ import com.github.kotlintelegrambot.entities.Update
 import command.cache.StatusLock
 import dsl.edit
 import dsl.replyToText
-import jni.GifBuilder
+import jni.NativeBuilder
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
-import javax.imageio.ImageIO
 
 fun getStickerCommand(bot: Bot, update: Update) {
     val message = update.message
@@ -48,7 +45,7 @@ fun getStickerCommand(bot: Bot, update: Update) {
                 Files.write(tgsFileTempPath, stickerByteArray!!)
                 message.edit(bot, editMessageId, LANG["converting"]!!)
 
-                outFile = File(GifBuilder().generateGif(tgsFileTemp.absolutePath))
+                outFile = File(NativeBuilder().generateGif(tgsFileTemp.absolutePath))
 
                 message.edit(bot, editMessageId, LANG["sending"]!!)
 
@@ -69,13 +66,11 @@ fun getStickerCommand(bot: Bot, update: Update) {
             }
         } else {
             try {
-                val stickerProgressStream = ByteArrayInputStream(stickerByteArray)
-                val pngOutStream = ByteArrayOutputStream()
-                val image = ImageIO.read(stickerProgressStream)
-                ImageIO.write(image, "png", pngOutStream)
+                val pngArray = NativeBuilder()
+                    .generatePNGFromWebP(stickerByteArray, stickerByteArray!!.size)
                 bot.sendDocument(
                     chatId = ChatId.fromId(update.message!!.chat.id),
-                    fileBytes = pngOutStream.toByteArray(),
+                    fileBytes = pngArray,
                     caption = LANG["gif_hint"],
                     fileName = "${sticker.setName}-${(1000000..9999999).random()}.png",
                     replyToMessageId = update.message!!.messageId,

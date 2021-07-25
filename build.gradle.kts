@@ -14,8 +14,8 @@ repositories {
 }
 
 dependencies {
-    // tgs -> gif
-    implementation(project(":LottieToGif"))
+    // jni
+    implementation(project(":jni"))
 
     // main
     implementation( group = "io.github.kotlin-telegram-bot.kotlin-telegram-bot", name = "telegram", version = "6.0.4")
@@ -25,9 +25,6 @@ dependencies {
 
     // api and net
     implementation( group = "com.github.kittinunf.fuel", name = "fuel", version = "2.3.1")
-
-    // sticker convert
-    implementation( group = "org.sejda.imageio", name = "webp-imageio", version = "0.1.6")
 
     // multi-task
     implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.4.2")
@@ -60,7 +57,7 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.jar {
-    dependsOn(":LottieToGif:build")
+    dependsOn(":jni:build")
     // enabled = true
     archiveBaseName.set("release-amd64")
     manifest {
