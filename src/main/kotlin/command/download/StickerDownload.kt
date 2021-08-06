@@ -45,7 +45,12 @@ fun getStickerCommand(bot: Bot, update: Update) {
                 Files.write(tgsFileTempPath, stickerByteArray!!)
                 message.edit(bot, editMessageId, LANG["converting"]!!)
 
+                val ofp = NativeBuilder().generateGif(tgsFileTemp.absolutePath)
+                if (ofp == "") {
+                    message.edit(bot, editMessageId, LANG["process_error"]!!);return
+                }
                 outFile = File(NativeBuilder().generateGif(tgsFileTemp.absolutePath))
+
 
                 message.edit(bot, editMessageId, LANG["sending"]!!)
 

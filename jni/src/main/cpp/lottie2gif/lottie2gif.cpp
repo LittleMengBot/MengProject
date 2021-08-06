@@ -269,7 +269,7 @@ std::string generate_gif(const std::string& tgs_path){
         try{
             app.render(in_file_data.buffer, temp, w, h);
         }catch(exception &e){
-            return ""
+            return "";
         }
     }
     else
