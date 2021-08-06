@@ -73,7 +73,6 @@ public:
         *width = *height = 512;   //default gif size
 
         if (!path) {
-            std::cout<<"99: No File Fould!"<<std::endl;
             return help(); }
 
         std::array<char, 5000> memory{};
@@ -84,14 +83,12 @@ public:
         path = realpath(path, memory.data());
 #endif
         if (!path){
-            printf("110\n");
             return help();
         }
 
         fileName = std::string(path);
 
         if (!tgsFile()) {
-            printf("117\n");
             return help();
         }
 
@@ -106,7 +103,6 @@ public:
         string data(reinterpret_cast<char*> (in_file_data));
         auto player = rlottie::Animation::loadFromData(data, "", "", false);
         if (!player) {
-            printf("191\n");
             return help();
         }
 
@@ -140,12 +136,10 @@ private:
     }
 
     int result() {
-        std::cout<<"Generated GIF file : "<<gifName<<std::endl;
         return 0;
     }
 
     static int help() {
-         std::cout<<"Usage: \n   lottie2gif [lottieFileName] [Resolution] [bgColor]\n\nExamples: \n    $ lottie2gif input.json\n    $ lottie2gif input.json 200x200\n    $ lottie2gif input.json 200x200 ff00ff\n\n";
         return 1;
     }
 
@@ -275,7 +269,7 @@ std::string generate_gif(const std::string& tgs_path){
         try{
             app.render(in_file_data.buffer, temp, w, h);
         }catch(exception &e){
-            std::cout << e.what() << std::endl;
+            return ""
         }
     }
     else
@@ -301,7 +295,7 @@ char* jstringToChar(JNIEnv* env, jstring jstr) {
     return rtn;
 }
 
-JNIEXPORT jstring JNICALL Java_jni_GifBuilder_generateGif(JNIEnv * env, jobject, jstring tgsPath){
+JNIEXPORT jstring JNICALL Java_jni_NativeBuilder_generateGif(JNIEnv * env, jobject, jstring tgsPath){
     char *tgs_path = jstringToChar(env, tgsPath);
     std::string tgs(tgs_path);
     const std::string gif_path = generate_gif(tgs);

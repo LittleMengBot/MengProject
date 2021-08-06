@@ -29,14 +29,12 @@ mem_encode makePNGBuffer(const unsigned char *rgba, int width, int height){
     // Initialize write structure
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
     if (png_ptr == nullptr) {
-        fprintf(stderr, "Could not allocate write struct\n");
         goto finalise;
     }
 
 // Initialize info structure
     info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == nullptr) {
-        fprintf(stderr, "Could not allocate info struct\n");
         goto finalise;
     }
 
@@ -81,8 +79,6 @@ mem_encode webp_decode(uint8_t * data, size_t data_size){
     WebPDecBuffer* const output_buffer = &config.output;
     output_buffer->colorspace = MODE_RGBA;
 
-//    FILE *fp = fopen("/Users/sakura/Downloads/amnoi.png", "wb");
-
     int width;
     int height;
 
@@ -91,10 +87,6 @@ mem_encode webp_decode(uint8_t * data, size_t data_size){
     mem_encode result = makePNGBuffer(bf, width, height);
 
     WebPFree(bf);
-//    fwrite(result, data_size, 1, fp);
-//
-//    fclose(fp);
-    printf("1");
 
     return result;
 
