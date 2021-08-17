@@ -74,7 +74,7 @@ fun remakeCommand(bot: Bot, update: Update) {
             message.replyToText(bot, update, LANG["remake_nEurope"]!!.format(country))
         }
         "北韓", "緬甸", "敘利亞", "古巴",
-        "越南", "支那" -> {
+        "越南", "支那", "阿富汗" -> {
             message.replyToText(bot, update, LANG["remake_sad"]!!.format(country))
         }
         "日本" -> {
