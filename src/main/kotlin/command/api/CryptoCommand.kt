@@ -12,7 +12,7 @@ import type.crypto.CryptoInfo
 
 fun getCryptoInfo(symbol: String): String {
     val headers = mapOf("Accepts" to "application/json",
-        "X-CMC_PRO_API_KEY" to "3897a307-9b48-40d5-8165-64f50d2d6026")
+        "X-CMC_PRO_API_KEY" to configCache!!.crypto_key)
     val url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest"
     val resp = NetUtils.sendGet(url, false, null, headers, listOf(Pair("symbol", symbol)))
 
