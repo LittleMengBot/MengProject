@@ -77,7 +77,7 @@ fun main() {
             command("momo") { PeopleCommand.withCommand(bot, this.update, message.text!!) }
             command("qr") { GlobalScope.launch { qrCommand(bot, this@command.update, args) } }
             command("replace") { replaceCommand(bot, this@command.update, args) }
-
+            command("b") { cryptoCommand(bot, this@command.update, args) }
 
             callbackQuery { GlobalScope.launch { callbackMethod(bot, this@callbackQuery.update) } }
 

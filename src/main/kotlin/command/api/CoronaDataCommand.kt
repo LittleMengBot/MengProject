@@ -75,16 +75,26 @@ fun meiguoCommand(bot: Bot, update: Update) {
     val message = update.message!!
 
     val editMessageId: Long = message.replyToText(bot, update, LANG["getting"]!!)
-    val coronaData = getCoronaData("usa")
+    try {
+        val coronaData = getCoronaData("usa")
+        update.message!!.edit(bot, editMessageId, coronaData, deleteButton(message.messageId))
+    }catch(e: Exception) {
+        e.printStackTrace()
+        update.message!!.edit(bot, editMessageId, LANG["find_empty"]!!, deleteButton(message.messageId))
+    }
 
-    update.message!!.edit(bot, editMessageId, coronaData, deleteButton(message.messageId))
 }
 
 fun indiaCommand(bot: Bot, update: Update) {
     val message = update.message!!
 
     val editMessageId: Long = message.replyToText(bot, update, LANG["getting"]!!)
-    val coronaData = getCoronaData("india")
+    try {
+        val coronaData = getCoronaData("india")
+        update.message!!.edit(bot, editMessageId, coronaData, deleteButton(message.messageId))
+    }catch(e: Exception) {
+        e.printStackTrace()
+        update.message!!.edit(bot, editMessageId, LANG["find_empty"]!!, deleteButton(message.messageId))
+    }
 
-    update.message!!.edit(bot, editMessageId, coronaData, deleteButton(message.messageId))
 }
