@@ -34,7 +34,6 @@ fun cryptoCommand(bot: Bot, update: Update, args: List<String>) {
         message.replyToText(bot, update, LANG["coin_empty"]!!, deleteButton(update.message!!.messageId))
         return
     }
-
     val editMessageId: Long = message.replyToText(bot, update, LANG["getting"]!!)
     try {
         val cryptoData = getCryptoInfo(args[0].uppercase(Locale.getDefault()))
