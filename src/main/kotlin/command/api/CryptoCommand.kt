@@ -9,6 +9,7 @@ import command.net.NetUtils
 import dsl.edit
 import dsl.replyToText
 import type.crypto.CryptoInfo
+import java.util.*
 
 fun getCryptoInfo(symbol: String): String {
     val headers = mapOf("Accepts" to "application/json",
@@ -36,7 +37,7 @@ fun cryptoCommand(bot: Bot, update: Update, args: List<String>) {
 
     val editMessageId: Long = message.replyToText(bot, update, LANG["getting"]!!)
     try {
-        val cryptoData = getCryptoInfo(args[0])
+        val cryptoData = getCryptoInfo(args[0].uppercase(Locale.getDefault()))
         update.message!!.edit(bot, editMessageId, cryptoData, deleteButton(message.messageId))
     }catch (e:Exception){
         e.printStackTrace()
