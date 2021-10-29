@@ -60,6 +60,7 @@ fun main() {
             command("del") { deleteCommand(bot, this.update) }
             command("send") { sendCommand(bot, this.update) }
             command("chongkai") { remakeCommand(bot, this.update) }
+            command("remake") { remakeCommand(bot, this.update) }
             command("search") { GlobalScope.launch { searchCommand(bot, this@command.update) } }
             command("music") { musicCommand(bot, this.update, args) }
             command("download") { GlobalScope.launch { downloadCommand(bot, update, args) } }
@@ -70,6 +71,7 @@ fun main() {
             command("meiguo") { GlobalScope.launch { meiguoCommand(bot, this@command.update) } }
             command("india") { GlobalScope.launch { indiaCommand(bot, this@command.update) } }
             command("gs") { GlobalScope.launch { getStickerCommand(bot, this@command.update) } }
+            command("getsticker") { GlobalScope.launch { getStickerCommand(bot, this@command.update) } }
             command("gif") { GlobalScope.launch { getAnimationCommand(bot, this@command.update) } }
             command("toutou") { PeopleCommand.withCommand(bot, this.update, message.text!!) }
             command("tietie") { PeopleCommand.withCommand(bot, this.update, message.text!!) }
