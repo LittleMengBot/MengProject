@@ -93,7 +93,7 @@ fun main() {
 
 //    bot.startWebhook()
 //
-//    // Please use nginx proxy_pass to hold the webhook post.
+//    Please use nginx proxy_pass to hold the webhook post.
 //    val env = applicationEngineEnvironment {
 //        module {
 //            routing {
