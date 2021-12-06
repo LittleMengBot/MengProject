@@ -57,6 +57,7 @@ server {
     }
 }
 ```
+注意：更改bot token时请将nginx配置文件中的```BOT_TOKEN```一并修改。
 
 ## music.json配置  
 ```
