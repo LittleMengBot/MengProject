@@ -67,7 +67,7 @@ object PeopleCommand {
         val peopleName = message.replyToMessage!!.getFullName()
 
 
-        if (myId == peopleId) {
+        if (myName == peopleName) {
             update.message!!.replyToText(
                 bot, update, withSelf.format(myId, myName),
                 deleteButton(update.message!!.messageId), ParseMode.HTML
