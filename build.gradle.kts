@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.6.10"
     application
 }
 
@@ -19,7 +19,7 @@ dependencies {
     implementation(project(":jni"))
 
     // main
-    implementation( group = "io.github.kotlin-telegram-bot.kotlin-telegram-bot", name = "telegram", version = "6.0.4")
+    implementation( group = "io.github.kotlin-telegram-bot.kotlin-telegram-bot", name = "telegram", version = "6.0.6")
     // webhook
     implementation(group = "io.ktor", name = "ktor-server-netty", version = "1.2.6" )
 
@@ -41,9 +41,6 @@ dependencies {
 
     // shot
     implementation (group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.0.0-beta-4")
-    implementation( group = "org.apache.logging.log4j", name = "log4j-api", version = "2.1")
-    implementation (group = "org.apache.logging.log4j", name = "log4j-core", version = "2.1")
-    implementation (group = "org.apache.logging.log4j", name = "log4j-slf4j-impl", version = "2.1")
 
     // qrcode
     implementation(group = "com.google.zxing", name = "core", version = "3.4.1")

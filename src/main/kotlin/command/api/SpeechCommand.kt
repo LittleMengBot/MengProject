@@ -5,6 +5,7 @@ import LANG
 import callback.deleteButton
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
+import com.github.kotlintelegrambot.entities.TelegramFile
 import com.github.kotlintelegrambot.entities.Update
 import com.google.gson.Gson
 import com.squareup.moshi.Moshi
@@ -79,7 +80,7 @@ suspend fun getSpeechByteArray(bot: Bot, update: Update, args: List<String>) {
             message.edit(bot, editMessageId, LANG["sending"]!!)
             bot.deleteMessage(ChatId.fromId(message.chat.id), editMessageId)
             bot.sendAudio(
-                chatId = ChatId.fromId(message.chat.id), audio = tempAudio,
+                chatId = ChatId.fromId(message.chat.id), audio = TelegramFile.ByFile(tempAudio),
                 title = "$key${(1000..9999).random()}",
                 replyToMessageId = message.messageId, replyMarkup = deleteButton(message.messageId)
             )

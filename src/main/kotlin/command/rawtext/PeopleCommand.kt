@@ -5,19 +5,12 @@ import callback.deleteButton
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.entities.Update
-import com.github.kotlintelegrambot.entities.User
+import dsl.getFullName
 import dsl.replyToText
 import momo_seed_letter
 import momo_seed_text
 
 object PeopleCommand {
-
-    private fun User.fullName(): String {
-        if (this.lastName != null) {
-            return "${this.firstName}${this.lastName}"
-        }
-        return this.firstName
-    }
 
     private fun String.getCount(son: String): Int {
         var fromIndex = 0
@@ -70,8 +63,8 @@ object PeopleCommand {
         }
         val myId = message.from!!.id
         val peopleId = message.replyToMessage!!.from!!.id
-        val myName = message.from!!.fullName()
-        val peopleName = message.replyToMessage!!.from!!.fullName()
+        val myName = message.getFullName()
+        val peopleName = message.replyToMessage!!.getFullName()
 
 
         if (myId == peopleId) {

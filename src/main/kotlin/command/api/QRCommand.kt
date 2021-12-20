@@ -5,6 +5,7 @@ import callback.deleteButton
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.ParseMode
+import com.github.kotlintelegrambot.entities.TelegramFile
 import com.github.kotlintelegrambot.entities.Update
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.BinaryBitmap
@@ -89,9 +90,8 @@ fun qrCommand(bot: Bot, update: Update, args: List<String>) {
         val qrByte = generateQR(sb.toString().trim())
         if (qrByte != null) {
             bot.sendDocument(chatId = ChatId.fromId(message.chat.id),
-            fileBytes = qrByte,
+            document = TelegramFile.ByByteArray(qrByte, "QR-${(1000000..9999999).random()}.png"),
             caption = LANG["qr_caption"],
-            fileName = "QR-${(1000000..9999999).random()}.png",
             replyMarkup = deleteButton(update.message!!.messageId), replyToMessageId = message.messageId)
         } else {
             message.replyToText(bot, update, LANG["qr_generate_error"]!!,

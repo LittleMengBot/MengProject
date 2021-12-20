@@ -5,6 +5,7 @@ import LANG
 import callback.deleteButton
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
+import com.github.kotlintelegrambot.entities.TelegramFile
 import com.github.kotlintelegrambot.entities.Update
 import command.cache.StatusLock
 import dsl.edit
@@ -139,7 +140,8 @@ fun downloadCommand(bot: Bot, update: Update, args: List<String>) {
         val videoPath = downloadVideo(videoUrl)
         if (videoPath != null){
             val videoFile = File(videoPath)
-            bot.sendVideo(ChatId.fromId(message.chat.id), videoFile,
+            bot.sendVideo(ChatId.fromId(message.chat.id),
+                TelegramFile.ByFile(videoFile),
                 replyMarkup = deleteButton(update.message!!.messageId), replyToMessageId = message.messageId)
             bot.deleteMessage(ChatId.fromId(message.chat.id), editMessageId)
             videoFile.delete()

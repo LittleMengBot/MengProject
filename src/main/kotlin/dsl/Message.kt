@@ -49,3 +49,10 @@ fun Message.delete(bot: Bot) {
         e.printStackTrace()
     }
 }
+
+fun Message.getFullName(): String {
+    if (this.senderChat != null){
+        return this.senderChat!!.title!!
+    }
+    return this.from!!.fullName()
+}

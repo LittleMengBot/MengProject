@@ -5,6 +5,7 @@ import LANG
 import callback.deleteButton
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
+import com.github.kotlintelegrambot.entities.TelegramFile
 import com.github.kotlintelegrambot.entities.Update
 import com.github.kotlintelegrambot.entities.files.Animation
 import com.github.kotlintelegrambot.entities.files.Document
@@ -45,9 +46,9 @@ fun getAnimationCommand(bot: Bot, update: Update) {
             animation != null && animation.fileName!!.endsWith(".gif") -> {
                 message.edit(bot, editMessageId, LANG["sending"]!!)
                 bot.sendDocument(
-                    chatId = ChatId.fromId(update.message!!.chat.id), fileBytes = tempByteArray!!,
+                    chatId = ChatId.fromId(update.message!!.chat.id),
+                    document = TelegramFile.ByByteArray(tempByteArray!!, "GIF-${(1000000..9999999).random()}.gifx"),
                     caption = LANG["gif_hint"],
-                    fileName = "GIF-${(1000000..9999999).random()}.gifx",
                     replyToMessageId = update.message!!.messageId,
                     replyMarkup = deleteButton(update.message!!.messageId)
                 )
@@ -62,9 +63,9 @@ fun getAnimationCommand(bot: Bot, update: Update) {
                 if (temp != null) {
                     message.edit(bot, editMessageId, LANG["sending"]!!)
                     bot.sendDocument(
-                        chatId = ChatId.fromId(update.message!!.chat.id), fileBytes = temp,
+                        chatId = ChatId.fromId(update.message!!.chat.id),
+                        document = TelegramFile.ByByteArray(temp, "GIF-${(1000000..9999999).random()}.gifx"),
                         caption = LANG["gif_hint"],
-                        fileName = "GIF-${(1000000..9999999).random()}.gifx",
                         replyToMessageId = update.message!!.messageId,
                         replyMarkup = deleteButton(update.message!!.messageId)
                     )
@@ -78,9 +79,9 @@ fun getAnimationCommand(bot: Bot, update: Update) {
             document != null -> {
                 message.edit(bot, editMessageId, LANG["sending"]!!)
                 bot.sendDocument(
-                    chatId = ChatId.fromId(update.message!!.chat.id), fileBytes = tempByteArray!!,
+                    chatId = ChatId.fromId(update.message!!.chat.id),
+                    document = TelegramFile.ByByteArray(tempByteArray!!, "GIF-${(1000000..9999999).random()}.gifx"),
                     caption = LANG["gif_hint"],
-                    fileName = "GIF-${(1000000..9999999).random()}.gifx",
                     replyToMessageId = update.message!!.messageId,
                     replyMarkup = deleteButton(update.message!!.messageId)
                 )

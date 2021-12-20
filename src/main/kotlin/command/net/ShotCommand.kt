@@ -4,6 +4,7 @@ import LANG
 import callback.deleteButton
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
+import com.github.kotlintelegrambot.entities.TelegramFile
 import com.github.kotlintelegrambot.entities.Update
 import com.github.kotlintelegrambot.network.fold
 import command.cache.ChromeDriverCache
@@ -90,8 +91,7 @@ suspend fun shotCommand(bot: Bot, update: Update, args: List<String>) {
         message.edit(bot, editMessageId, LANG["sending"]!!)
         bot.sendDocument(
             chatId = ChatId.fromId(message.chat.id),
-            fileBytes = screenShot,
-            fileName = "shot-${(10000000..99999999).random()}.png",
+            document = TelegramFile.ByByteArray(screenShot, "shot-${(10000000..99999999).random()}.png"),
             replyMarkup = deleteButton(message.from!!.id)
         ).fold({},{
             it.exception?.printStackTrace()

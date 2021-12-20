@@ -14,11 +14,18 @@ fun User.isChatMember(bot: Bot): Boolean {
     var check = false
     bot.getChatMember(ChatId.fromId(configCache!!.group_id), this.id).fold(
         {
-            if (it!!.result!!.status in listOf("creator", "administrator", "member")) {
+            if (it.status in listOf("creator", "administrator", "member")) {
                 check = true
             }
         }, {
             check = false
         })
     return check
+}
+
+fun User.fullName(): String {
+    if (this.lastName != null) {
+        return "${this.firstName}${this.lastName}"
+    }
+    return this.firstName
 }

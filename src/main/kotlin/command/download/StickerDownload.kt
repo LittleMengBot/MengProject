@@ -4,6 +4,7 @@ import LANG
 import callback.deleteButton
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
+import com.github.kotlintelegrambot.entities.TelegramFile
 import com.github.kotlintelegrambot.entities.Update
 import command.cache.StatusLock
 import dsl.edit
@@ -55,9 +56,9 @@ fun getStickerCommand(bot: Bot, update: Update) {
                 message.edit(bot, editMessageId, LANG["sending"]!!)
 
                 bot.sendDocument(
-                    chatId = ChatId.fromId(update.message!!.chat.id), fileBytes = outFile.readBytes(),
+                    chatId = ChatId.fromId(update.message!!.chat.id),
+                    document = TelegramFile.ByByteArray(outFile!!.readBytes(), "GIF-${(1000000..9999999).random()}.gifx"),
                     caption = LANG["gif_hint"],
-                    fileName = "GIF-${(1000000..9999999).random()}.gifx",
                     replyMarkup = deleteButton(update.message!!.messageId), replyToMessageId = message.messageId
                 )
                 bot.deleteMessage(chatId = ChatId.fromId(update.message!!.chat.id), messageId = editMessageId)
@@ -75,9 +76,8 @@ fun getStickerCommand(bot: Bot, update: Update) {
                     .generatePNGFromWebP(stickerByteArray, stickerByteArray!!.size)
                 bot.sendDocument(
                     chatId = ChatId.fromId(update.message!!.chat.id),
-                    fileBytes = pngArray,
+                    document = TelegramFile.ByByteArray(pngArray, "${sticker.setName}-${(1000000..9999999).random()}.png"),
                     caption = LANG["gif_hint"],
-                    fileName = "${sticker.setName}-${(1000000..9999999).random()}.png",
                     replyToMessageId = update.message!!.messageId,
                     replyMarkup = deleteButton(update.message!!.messageId)
                 )

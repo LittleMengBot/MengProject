@@ -4,6 +4,7 @@ import LANG
 import callback.deleteButton
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.Update
+import dsl.getFullName
 import dsl.replyToText
 
 val P = listOf(
@@ -68,24 +69,24 @@ fun remakeCommand(bot: Bot, update: Update) {
         "西班牙", "葡萄牙", "奧地利", "澳門",
         "香港", "台灣", "新加坡", "韓國", "瑞士",
         "阿聯", "澳大利亞", "紐西蘭" -> {
-            message.replyToText(bot, update, LANG["remake_congratulation"]!!.format(country))
+            message.replyToText(bot, update, LANG["remake_congratulation"]!!.format(message.getFullName(), country))
         }
         "丹麥", "芬蘭", "冰島", "挪威", "瑞典" -> {
-            message.replyToText(bot, update, LANG["remake_nEurope"]!!.format(country))
+            message.replyToText(bot, update, LANG["remake_nEurope"]!!.format(message.getFullName(), country))
         }
         "北韓", "緬甸", "敘利亞", "古巴",
         "越南", "支那", "阿富汗" -> {
-            message.replyToText(bot, update, LANG["remake_sad"]!!.format(country))
+            message.replyToText(bot, update, LANG["remake_sad"]!!.format(message.getFullName(), country))
         }
         "日本" -> {
-            message.replyToText(bot, update, LANG["remake_japan"]!!)
+            message.replyToText(bot, update, LANG["remake_japan"]!!.format(message.getFullName()))
         }
         "荷蘭" -> {
-            message.replyToText(bot, update, LANG["remake_Netherlands"]!!)
+            message.replyToText(bot, update, LANG["remake_Netherlands"]!!.format(message.getFullName()))
         }
         else -> {
             message.replyToText(
-                bot, update, LANG["remake"]!!.format(country),
+                bot, update, LANG["remake"]!!.format(message.getFullName(), country),
                 replyMarkup = deleteButton(messageId = message.messageId)
             )
         }
