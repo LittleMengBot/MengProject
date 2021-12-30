@@ -8,13 +8,15 @@ import dsl.replyToText
 
 fun whatCommand(bot: Bot, update: Update) {
     val message = update.message!!
-    if (message.text != null) {
-        update.message!!.replyToText(
-            bot,
-            update,
-            update.message!!.text!!,
-            deleteButton(update.message!!.messageId),
-            ParseMode.MARKDOWN
-        )
+    if (message.replyToMessage != null) {
+        if (message.replyToMessage!!.text != null) {
+            update.message!!.replyToText(
+                bot,
+                update,
+                message.replyToMessage!!.text!!,
+                deleteButton(update.message!!.messageId),
+                ParseMode.MARKDOWN
+            )
+        }else return
     }else return
 }
