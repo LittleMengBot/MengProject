@@ -80,6 +80,7 @@ fun main() {
             command("qr") { GlobalScope.launch { qrCommand(bot, this@command.update, args) } }
             command("replace") { replaceCommand(bot, this@command.update, args) }
             command("b") { cryptoCommand(bot, this@command.update, args) }
+            command("what") { whatCommand(bot, this@command.update) }
 
             callbackQuery { GlobalScope.launch { callbackMethod(bot, this@callbackQuery.update) } }
 
