@@ -67,8 +67,8 @@ fun remakeCommand(bot: Bot, update: Update) {
         "米國", "加拿大", "德國", "英國", "法國",
         "義大利", "比利時", "盧森堡", "愛爾蘭", "希臘",
         "西班牙", "葡萄牙", "奧地利", "澳門",
-        "香港", "台灣", "新加坡", "韓國", "瑞士",
-        "阿聯", "澳大利亞", "紐西蘭" -> {
+        "台灣", "新加坡", "韓國", "瑞士",
+        "阿聯", "澳州", "紐西蘭" -> {
             message.replyToText(bot, update, LANG["remake_congratulation"]!!.format(message.getFullName(), country))
         }
         "丹麥", "芬蘭", "冰島", "挪威", "瑞典" -> {
@@ -83,6 +83,9 @@ fun remakeCommand(bot: Bot, update: Update) {
         }
         "荷蘭" -> {
             message.replyToText(bot, update, LANG["remake_Netherlands"]!!.format(message.getFullName()))
+        }
+        "香港" -> {
+            message.replyToText(bot, update, LANG["remake_HongKong"]!!.format(message.getFullName()))
         }
         else -> {
             message.replyToText(

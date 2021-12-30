@@ -4,7 +4,6 @@ import ConfigLoader.configCache
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.User
-import com.github.kotlintelegrambot.network.fold
 
 fun User.isAdmin(): Boolean {
     return configCache!!.admin_id.contains(this.id)
@@ -24,8 +23,5 @@ fun User.isChatMember(bot: Bot): Boolean {
 }
 
 fun User.fullName(): String {
-    if (this.lastName != null) {
-        return "${this.firstName}${this.lastName}"
-    }
-    return this.firstName
+    return if(this.lastName != null) "${this.firstName} ${this.lastName}" else this.firstName
 }
