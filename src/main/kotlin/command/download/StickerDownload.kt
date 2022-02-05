@@ -38,9 +38,8 @@ fun getStickerCommand(bot: Bot, update: Update) {
         val stickerByteArray = bot.downloadFileBytes(sticker.fileId)
 
         val filePath = bot.getFile(sticker.fileId).first!!.body()!!.result!!.filePath!!
-        val stickerType = filePath.substring(filePath.length - 4, filePath.length)
 
-        when (stickerType) {
+        when (filePath.substring(filePath.length - 4, filePath.length)) {
             ".tgs" -> {
                 var tgsFileTemp: File? = null
                 var outFile: File? = null
@@ -88,7 +87,7 @@ fun getStickerCommand(bot: Bot, update: Update) {
                             pngArray,
                             "${sticker.setName}-${(1000000..9999999).random()}.png"
                         ),
-                        caption = LANG["gif_hint"],
+                        caption = LANG["qr_caption"],
                         replyToMessageId = update.message!!.messageId,
                         replyMarkup = deleteButton(update.message!!.messageId)
                     )
