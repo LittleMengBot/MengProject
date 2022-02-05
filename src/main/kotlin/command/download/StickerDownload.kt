@@ -37,58 +37,90 @@ fun getStickerCommand(bot: Bot, update: Update) {
         val editMessageId: Long = message.replyToText(bot, update, LANG["getting"]!!)
         val stickerByteArray = bot.downloadFileBytes(sticker.fileId)
 
-        if (sticker.isAnimated) {
-            var tgsFileTemp: File? = null
-            var outFile: File? = null
-            try {
-                tgsFileTemp = File.createTempFile("stickers", ".tgs")
-                val tgsFileTempPath = Paths.get(tgsFileTemp.toURI())
-                Files.write(tgsFileTempPath, stickerByteArray!!)
-                message.edit(bot, editMessageId, LANG["converting"]!!)
+        val filePath = bot.getFile(sticker.fileId).first!!.body()!!.result!!.filePath!!
+        val stickerType = filePath.substring(filePath.length - 4, filePath.length)
 
-                val ofp = NativeBuilder().generateGif(tgsFileTemp.absolutePath)
-                if (ofp == "") {
-                    message.edit(bot, editMessageId, LANG["process_error"]!!);return
+        when (stickerType) {
+            ".tgs" -> {
+                var tgsFileTemp: File? = null
+                var outFile: File? = null
+                try {
+                    tgsFileTemp = File.createTempFile("stickers", ".tgs")
+                    val tgsFileTempPath = Paths.get(tgsFileTemp.toURI())
+                    Files.write(tgsFileTempPath, stickerByteArray!!)
+                    message.edit(bot, editMessageId, LANG["converting"]!!)
+
+                    val ofp = NativeBuilder().generateGif(tgsFileTemp.absolutePath)
+                    if (ofp == "") {
+                        message.edit(bot, editMessageId, LANG["process_error"]!!);return
+                    }
+                    outFile = File(NativeBuilder().generateGif(tgsFileTemp.absolutePath))
+
+
+                    message.edit(bot, editMessageId, LANG["sending"]!!)
+
+                    bot.sendDocument(
+                        chatId = ChatId.fromId(update.message!!.chat.id),
+                        document = TelegramFile.ByByteArray(
+                            outFile.readBytes(),
+                            "GIF-${(1000000..9999999).random()}.gifx"
+                        ),
+                        caption = LANG["gif_hint"],
+                        replyMarkup = deleteButton(update.message!!.messageId), replyToMessageId = message.messageId
+                    )
+                    bot.deleteMessage(chatId = ChatId.fromId(update.message!!.chat.id), messageId = editMessageId)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    message.edit(bot, editMessageId, LANG["process_error"]!!)
+                } finally {
+                    StatusLock.freeze(lockCode)
+                    tgsFileTemp?.delete()
+                    outFile?.delete()
                 }
-                outFile = File(NativeBuilder().generateGif(tgsFileTemp.absolutePath))
-
-
-                message.edit(bot, editMessageId, LANG["sending"]!!)
-
-                bot.sendDocument(
-                    chatId = ChatId.fromId(update.message!!.chat.id),
-                    document = TelegramFile.ByByteArray(outFile!!.readBytes(), "GIF-${(1000000..9999999).random()}.gifx"),
-                    caption = LANG["gif_hint"],
-                    replyMarkup = deleteButton(update.message!!.messageId), replyToMessageId = message.messageId
-                )
-                bot.deleteMessage(chatId = ChatId.fromId(update.message!!.chat.id), messageId = editMessageId)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                message.edit(bot, editMessageId, LANG["process_error"]!!)
-            } finally {
-                StatusLock.freeze(lockCode)
-                tgsFileTemp?.delete()
-                outFile?.delete()
             }
-        } else {
-            try {
-                val pngArray = NativeBuilder()
-                    .generatePNGFromWebP(stickerByteArray, stickerByteArray!!.size)
-                bot.sendDocument(
-                    chatId = ChatId.fromId(update.message!!.chat.id),
-                    document = TelegramFile.ByByteArray(pngArray, "${sticker.setName}-${(1000000..9999999).random()}.png"),
-                    caption = LANG["gif_hint"],
-                    replyToMessageId = update.message!!.messageId,
-                    replyMarkup = deleteButton(update.message!!.messageId)
-                )
-            } catch (e: Exception) {
-                e.printStackTrace()
-                message.edit(bot, editMessageId, LANG["process_error"]!!)
-            } finally {
-                StatusLock.freeze(lockCode)
-                bot.deleteMessage(chatId = ChatId.fromId(update.message!!.chat.id), messageId = editMessageId)
+            "webp" -> {
+                try {
+                    val pngArray = NativeBuilder()
+                        .generatePNGFromWebP(stickerByteArray, stickerByteArray!!.size)
+                    bot.sendDocument(
+                        chatId = ChatId.fromId(update.message!!.chat.id),
+                        document = TelegramFile.ByByteArray(
+                            pngArray,
+                            "${sticker.setName}-${(1000000..9999999).random()}.png"
+                        ),
+                        caption = LANG["gif_hint"],
+                        replyToMessageId = update.message!!.messageId,
+                        replyMarkup = deleteButton(update.message!!.messageId)
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    message.edit(bot, editMessageId, LANG["process_error"]!!)
+                } finally {
+                    StatusLock.freeze(lockCode)
+                    bot.deleteMessage(chatId = ChatId.fromId(update.message!!.chat.id), messageId = editMessageId)
+                }
             }
-
+            "webm" -> {
+                try {
+                    val outGif = toGif(stickerByteArray!!, ".webm")
+                    bot.sendDocument(
+                        chatId = ChatId.fromId(update.message!!.chat.id),
+                        document = TelegramFile.ByByteArray(
+                            outGif!!,
+                            "${sticker.setName}-${(1000000..9999999).random()}.gifx"
+                        ),
+                        caption = LANG["gif_hint"],
+                        replyToMessageId = update.message!!.messageId,
+                        replyMarkup = deleteButton(update.message!!.messageId)
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    message.edit(bot, editMessageId, LANG["process_error"]!!)
+                } finally {
+                    StatusLock.freeze(lockCode)
+                    bot.deleteMessage(chatId = ChatId.fromId(update.message!!.chat.id), messageId = editMessageId)
+                }
+            }
         }
     } else {
         message.replyToText(bot, update, LANG["no_sticker"]!!, deleteButton(messageId = message.messageId))

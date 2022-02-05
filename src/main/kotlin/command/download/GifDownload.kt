@@ -58,7 +58,7 @@ fun getAnimationCommand(bot: Bot, update: Update) {
 
             animation != null && animation.fileName!!.endsWith(".mp4") -> {
                 message.edit(bot, editMessageId, LANG["converting"]!!)
-                val temp = toGif(tempByteArray!!)
+                val temp = toGif(tempByteArray!!, ".mp4")
 
                 if (temp != null) {
                     message.edit(bot, editMessageId, LANG["sending"]!!)
@@ -93,16 +93,16 @@ fun getAnimationCommand(bot: Bot, update: Update) {
     }
 }
 
-fun toGif(tempByteArray: ByteArray): ByteArray?{
-    val mp4File = FileUtils.convertToTemp(tempByteArray, "gif", ".mp4")
+fun toGif(tempByteArray: ByteArray, suffix: String): ByteArray?{
+    val vFile = FileUtils.convertToTemp(tempByteArray, "gif", suffix)
     val ffmpegStatus = Runtime.getRuntime().exec(
         "${configCache!!.ffmpeg_path} -i " +
-                "${mp4File.absolutePath} ${mp4File.absolutePath}.gif").execListener()!!
+                "${vFile.absolutePath} ${vFile.absolutePath}.gif").execListener()!!
     return if (ffmpegStatus.contains("Invalid")){
-        mp4File.delete()
+        vFile.delete()
         null
     }else{
-        val ret = File("${mp4File.absolutePath}.gif")
+        val ret = File("${vFile.absolutePath}.gif")
         val size = ret.length()
         try {
             if (size < 20971520){
@@ -112,7 +112,7 @@ fun toGif(tempByteArray: ByteArray): ByteArray?{
             }
         }finally {
             ret.delete()
-            mp4File.delete()
+            vFile.delete()
         }
     }
 }
