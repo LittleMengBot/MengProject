@@ -90,25 +90,25 @@ fun main() {
         }
     }
 
-//    bot.startPolling()
+    bot.startPolling()
 
-    bot.startWebhook()
-
-//    Please use nginx proxy_pass to hold the webhook post.
-    val env = applicationEngineEnvironment {
-        module {
-            routing {
-                post("/${configCache!!.bot_token}") {
-                    val response = call.receiveText()
-                    bot.processUpdate(response)
-                    call.respond(HttpStatusCode.OK)
-                }
-            }
-        }
-        connector {
-            port = configCache!!.webhook_proxy_port
-        }
-    }
-
-    embeddedServer(Netty, env).start(wait = true)
+//    bot.startWebhook()
+//
+////    Please use nginx proxy_pass to hold the webhook post.
+//    val env = applicationEngineEnvironment {
+//        module {
+//            routing {
+//                post("/${configCache!!.bot_token}") {
+//                    val response = call.receiveText()
+//                    bot.processUpdate(response)
+//                    call.respond(HttpStatusCode.OK)
+//                }
+//            }
+//        }
+//        connector {
+//            port = configCache!!.webhook_proxy_port
+//        }
+//    }
+//
+//    embeddedServer(Netty, env).start(wait = true)
 }
