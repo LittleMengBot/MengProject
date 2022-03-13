@@ -74,6 +74,27 @@ server {
 }
 ```  
 一个音乐标题对应一个链接。为方便搜索建议加入简繁体。  
+
+## 关于截图功能
+### 依赖
+- chromedriver  
+下载地址：https://chromedriver.storage.googleapis.com/index.html
+解压后将可执行文件移动到```/usr/bin```
+- Chrome  
+安装步骤：
+  ```
+  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  sudo dpkg -i google-chrome*.deb    # 此步可能显示安装错误，继续运行下面的命令即可
+  sudo apt-get install -f
+  google-chrome --version # 查看版本，根据版本号下载对应的chromedriver驱动。
+  ```
+- *中文字体  
+请将准备好的中文字体（.ttf）复制到```/usr/share/fonts/```，之后运行：
+  ```
+  fc-cache -fv
+  fc-list :lang=zh # 检查
+  ```
+- 同时依赖于Tor
 ## 构建  
 1.&nbsp;clone此仓库  
 2.&nbsp;仓库目录下运行  
