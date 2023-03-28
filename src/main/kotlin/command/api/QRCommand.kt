@@ -63,7 +63,8 @@ fun qrCommand(bot: Bot, update: Update, args: List<String>) {
     var photoByteArray: ByteArray? = null
     if (message.replyToMessage?.photo != null) {
         photoByteArray = bot.downloadFileBytes(
-            message.replyToMessage!!.photo!![message.replyToMessage!!.photo!!.size - 1].fileId)
+            message.replyToMessage!!.photo!![message.replyToMessage!!.photo!!.size - 1].fileId
+        )
     }
 
     if (message.replyToMessage?.document != null) {
@@ -76,31 +77,41 @@ fun qrCommand(bot: Bot, update: Update, args: List<String>) {
     if (photoByteArray != null) {
         val text = parseQR(photoByteArray)
         if (text != null) {
-            message.replyToText(bot, update, LANG["qr_head"]!!.format(text),
+            message.replyToText(
+                bot, update, LANG["qr_head"]!!.format(text),
                 deleteButton(update.message!!.messageId),
-                ParseMode.MARKDOWN);return
-        }else{
-            message.replyToText(bot, update, LANG["qr_not_found"]!!,
+                ParseMode.MARKDOWN
+            );return
+        } else {
+            message.replyToText(
+                bot, update, LANG["qr_not_found"]!!,
                 deleteButton(update.message!!.messageId),
-                ParseMode.MARKDOWN);return
+                ParseMode.MARKDOWN
+            );return
         }
-    }else if (args.isNotEmpty()) {
+    } else if (args.isNotEmpty()) {
         val sb = StringBuilder()
-        args.forEach { sb.append(it);sb.append(" ")}
+        args.forEach { sb.append(it);sb.append(" ") }
         val qrByte = generateQR(sb.toString().trim())
         if (qrByte != null) {
-            bot.sendDocument(chatId = ChatId.fromId(message.chat.id),
-            document = TelegramFile.ByByteArray(qrByte, "QR-${(1000000..9999999).random()}.png"),
-            caption = LANG["qr_caption"],
-            replyMarkup = deleteButton(update.message!!.messageId), replyToMessageId = message.messageId)
+            bot.sendDocument(
+                chatId = ChatId.fromId(message.chat.id),
+                document = TelegramFile.ByByteArray(qrByte, "QR-${(1000000..9999999).random()}.png"),
+                caption = LANG["qr_caption"],
+                replyMarkup = deleteButton(update.message!!.messageId), replyToMessageId = message.messageId
+            )
         } else {
-            message.replyToText(bot, update, LANG["qr_generate_error"]!!,
+            message.replyToText(
+                bot, update, LANG["qr_generate_error"]!!,
                 deleteButton(update.message!!.messageId),
-                ParseMode.MARKDOWN);return
+                ParseMode.MARKDOWN
+            );return
         }
-    }else{
-        message.replyToText(bot, update, LANG["qr_hint"]!!,
+    } else {
+        message.replyToText(
+            bot, update, LANG["qr_hint"]!!,
             deleteButton(update.message!!.messageId),
-            ParseMode.MARKDOWN);return
+            ParseMode.MARKDOWN
+        );return
     }
 }

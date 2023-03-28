@@ -37,11 +37,11 @@ fun searchImageByUrl(imageUrl: String): List<Pair<String, String>> {
             titleList.add(titleSingle.text())
         }
 
-        for (i in title.indices){
+        for (i in title.indices) {
             result.add(Pair(titleList[i], urlList[i]))
         }
         return result
-    }else{
+    } else {
         return result
     }
 }
@@ -50,17 +50,17 @@ fun searchCommand(bot: Bot, update: Update) {
     val message = update.message!!
     val photo: PhotoSize
     var photoUrl: String? = null
-    if (message.replyToMessage?.photo != null){
+    if (message.replyToMessage?.photo != null) {
         val editMessageId: Long = message.replyToText(bot, update, LANG["finding"]!!)
         photo = message.replyToMessage!!.photo!![message.replyToMessage!!.photo!!.size - 1]
         val photoFile = bot.getFile(photo.fileId)
         photoFile.fold({
             photoUrl = LANG["file_base_url"]!!.format(configCache!!.bot_token, it!!.result!!.filePath)
-        },{
+        }, {
             it.exception?.printStackTrace()
         })
 
-        if (photoUrl != null){
+        if (photoUrl != null) {
             val resultList = searchImageByUrl(photoUrl!!)
             if (resultList.isNotEmpty()) {
                 val sb = StringBuilder()
@@ -68,12 +68,18 @@ fun searchCommand(bot: Bot, update: Update) {
                     sb.append(LANG["image_search_single"]!!.format(it.first, it.second))
                 }
                 sb.append(LANG["image_search_foot"])
-                message.edit(bot, editMessageId, sb.toString(), deleteButton(messageId = message.messageId), ParseMode.MARKDOWN)
-            }else{
+                message.edit(
+                    bot,
+                    editMessageId,
+                    sb.toString(),
+                    deleteButton(messageId = message.messageId),
+                    ParseMode.MARKDOWN
+                )
+            } else {
                 message.edit(bot, editMessageId, LANG["image_not_found"]!!, deleteButton(messageId = message.messageId))
             }
         }
-    }else{
+    } else {
         message.replyToText(bot, update, LANG["image_reply"]!!, deleteButton(messageId = message.messageId))
     }
 }

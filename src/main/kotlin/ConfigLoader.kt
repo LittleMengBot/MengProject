@@ -7,12 +7,12 @@ object ConfigLoader {
 
     var configCache: Config? = null
 
-    fun init(): Boolean{
+    fun init(): Boolean {
         val config = File(EnvironmentStatus.currentPath + "config.json").readText()
         return try {
             configCache = Gson().fromJson(config, Config::class.java)
             true
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             false
         }

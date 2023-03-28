@@ -21,8 +21,10 @@ fun getCoronaData(country: String): String {
     calendar.add(Calendar.DATE, -1)
     val yesterday = datafmt.format(calendar.time)
 
-    val headers = mapOf("x-rapidapi-key" to configCache!!.corona_headers.`x-rapidapi-key`,
-    "x-rapidapi-host" to configCache!!.corona_headers.`x-rapidapi-host`)
+    val headers = mapOf(
+        "x-rapidapi-key" to configCache!!.corona_headers.`x-rapidapi-key`,
+        "x-rapidapi-host" to configCache!!.corona_headers.`x-rapidapi-host`
+    )
 
     val todayResult = NetUtils.sendGet(
         url = "https://covid-193.p.rapidapi.com/history",
@@ -78,7 +80,7 @@ fun meiguoCommand(bot: Bot, update: Update) {
     try {
         val coronaData = getCoronaData("usa")
         update.message!!.edit(bot, editMessageId, coronaData, deleteButton(message.messageId))
-    }catch(e: Exception) {
+    } catch (e: Exception) {
         e.printStackTrace()
         update.message!!.edit(bot, editMessageId, LANG["find_empty"]!!, deleteButton(message.messageId))
     }
@@ -92,7 +94,7 @@ fun indiaCommand(bot: Bot, update: Update) {
     try {
         val coronaData = getCoronaData("india")
         update.message!!.edit(bot, editMessageId, coronaData, deleteButton(message.messageId))
-    }catch(e: Exception) {
+    } catch (e: Exception) {
         e.printStackTrace()
         update.message!!.edit(bot, editMessageId, LANG["find_empty"]!!, deleteButton(message.messageId))
     }

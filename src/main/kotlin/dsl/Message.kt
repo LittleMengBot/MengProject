@@ -51,7 +51,7 @@ fun Message.delete(bot: Bot) {
 }
 
 fun Message.getFullName(): String {
-    if (this.senderChat != null){
+    if (this.senderChat != null) {
         return this.senderChat!!.title!!
     }
     return this.from!!.fullName()

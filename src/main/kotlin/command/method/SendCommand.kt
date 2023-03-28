@@ -5,7 +5,6 @@ import LANG
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Update
-import com.github.kotlintelegrambot.network.fold
 import dsl.isChatMember
 import dsl.replyToText
 

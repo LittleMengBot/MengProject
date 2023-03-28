@@ -14,6 +14,7 @@ import command.net.NetUtils
 import dsl.edit
 import dsl.replyToText
 import file.FileUtils.convertToTemp
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -22,6 +23,7 @@ import type.speech.RequestStartType
 import type.speech.TaskStatus
 import java.util.*
 
+@DelicateCoroutinesApi
 suspend fun getAudioBytes(key: String): ByteArray? {
     val gsonParser = Gson()
     val header = mapOf("content-type" to "application/json")
@@ -34,9 +36,14 @@ suspend fun getAudioBytes(key: String): ByteArray? {
     val taskStatus: TaskStatus
 
     try {
-        val r = NetUtils.sendPost(url = configCache!!.speech_api, method = "task", header = header, requestJson = requestJson)
+        val r = NetUtils.sendPost(
+            url = configCache!!.speech_api,
+            method = "task",
+            header = header,
+            requestJson = requestJson
+        )
         taskStatus = gsonParser.fromJson(r, TaskStatus::class.java)
-    }catch (e: Exception) {
+    } catch (e: Exception) {
         return null
     }
 
@@ -46,7 +53,8 @@ suspend fun getAudioBytes(key: String): ByteArray? {
         val audioStatus: AudioStatus = GlobalScope.async {
             delay(3000L)
             requestId = taskStatus.id
-            audioJson = NetUtils.sendGet(url = configCache!!.speech_api, false, "result", header, listOf(Pair("id", requestId)))
+            audioJson =
+                NetUtils.sendGet(url = configCache!!.speech_api, false, "result", header, listOf(Pair("id", requestId)))
             return@async gsonParser.fromJson(audioJson, AudioStatus::class.java)
         }.await()
 
@@ -56,6 +64,7 @@ suspend fun getAudioBytes(key: String): ByteArray? {
     } else null
 }
 
+@DelicateCoroutinesApi
 suspend fun getSpeechByteArray(bot: Bot, update: Update, args: List<String>) {
     val message = update.message!!
     var key: String? = null

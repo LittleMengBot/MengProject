@@ -26,17 +26,18 @@ suspend fun shotWeb(url: String, w: Int, h: Int): ByteArray? {
 
     try {
         return driver.getScreenshotAs(OutputType.BYTES)
-    }finally {
+    } finally {
         driver.quit()
     }
 
 
 }
 
-fun checkUrl(url: String?): Boolean{
+fun checkUrl(url: String?): Boolean {
     return url?.matches("[a-zA-z]+://[^\\s]*".toRegex()) ?: false
 }
 
+@DelicateCoroutinesApi
 suspend fun shotCommand(bot: Bot, update: Update, args: List<String>) {
     val message = update.message!!
 
@@ -47,28 +48,28 @@ suspend fun shotCommand(bot: Bot, update: Update, args: List<String>) {
     if (message.replyToMessage == null) {
         message.replyToText(bot, update, LANG["shot_reply_hint"]!!);return
     }
-    if (args.isEmpty()){
+    if (args.isEmpty()) {
         w = 1920
         h = 1080
-    }else{
+    } else {
         try {
             w = args[0].toInt()
             h = args[1].toInt()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             message.replyToText(bot, update, LANG["shot_args_error"]!!);return
         }
-        if (w > 20000 || h > 20000 || w < 500 || h < 500){
+        if (w > 20000 || h > 20000 || w < 500 || h < 500) {
             message.replyToText(bot, update, LANG["shot_args_error"]!!);return
         }
     }
 
-    if (checkUrl(message.replyToMessage?.text)){
+    if (checkUrl(message.replyToMessage?.text)) {
         url = message.replyToMessage!!.text
-    }else{
+    } else {
         message.replyToText(bot, update, LANG["shot_url_error"]!!);return
     }
 
-    if (url == null){
+    if (url == null) {
         message.replyToText(bot, update, LANG["shot_reply_hint"]!!);return
     }
 
@@ -87,19 +88,19 @@ suspend fun shotCommand(bot: Bot, update: Update, args: List<String>) {
     val editMessageId = message.replyToText(bot, update, LANG["shot_in"]!!)
 
     val screenShot = shotWeb(url, w, h)
-    if (screenShot != null){
+    if (screenShot != null) {
         message.edit(bot, editMessageId, LANG["sending"]!!)
         bot.sendDocument(
             chatId = ChatId.fromId(message.chat.id),
             document = TelegramFile.ByByteArray(screenShot, "shot-${(10000000..99999999).random()}.png"),
             replyMarkup = deleteButton(message.from!!.id)
-        ).fold({},{
+        ).fold({}, {
             it.exception?.printStackTrace()
             println(it.errorBody)
         })
         bot.deleteMessage(chatId = ChatId.fromId(message.chat.id), messageId = editMessageId)
         StatusLock.freeze(lockCode)
-    }else{
+    } else {
         message.edit(bot, editMessageId, LANG["shot_error"]!!, deleteButton(message.from!!.id))
         StatusLock.freeze(lockCode)
     }

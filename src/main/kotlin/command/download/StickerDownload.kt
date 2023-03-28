@@ -10,6 +10,7 @@ import command.cache.StatusLock
 import dsl.edit
 import dsl.replyToText
 import jni.NativeBuilder
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 
+@DelicateCoroutinesApi
 fun getStickerCommand(bot: Bot, update: Update) {
     val message = update.message
 
@@ -61,11 +63,11 @@ fun getStickerCommand(bot: Bot, update: Update) {
                     bot.sendDocument(
                         chatId = ChatId.fromId(update.message!!.chat.id),
                         document = TelegramFile.ByByteArray(
-                            outFile.readBytes(),
-                            "GIF-${(1000000..9999999).random()}.gifx"
+                            outFile.readBytes(), "GIF-${(1000000..9999999).random()}.gifx"
                         ),
                         caption = LANG["gif_hint"],
-                        replyMarkup = deleteButton(update.message!!.messageId), replyToMessageId = message.messageId
+                        replyMarkup = deleteButton(update.message!!.messageId),
+                        replyToMessageId = message.messageId
                     )
                     bot.deleteMessage(chatId = ChatId.fromId(update.message!!.chat.id), messageId = editMessageId)
                 } catch (e: Exception) {
@@ -77,15 +79,14 @@ fun getStickerCommand(bot: Bot, update: Update) {
                     outFile?.delete()
                 }
             }
+
             "webp" -> {
                 try {
-                    val pngArray = NativeBuilder()
-                        .generatePNGFromWebP(stickerByteArray, stickerByteArray!!.size)
+                    val pngArray = NativeBuilder().generatePNGFromWebP(stickerByteArray, stickerByteArray!!.size)
                     bot.sendDocument(
                         chatId = ChatId.fromId(update.message!!.chat.id),
                         document = TelegramFile.ByByteArray(
-                            pngArray,
-                            "${sticker.setName}-${(1000000..9999999).random()}.png"
+                            pngArray, "${sticker.setName}-${(1000000..9999999).random()}.png"
                         ),
                         caption = LANG["qr_caption"],
                         replyToMessageId = update.message!!.messageId,
@@ -99,14 +100,14 @@ fun getStickerCommand(bot: Bot, update: Update) {
                     bot.deleteMessage(chatId = ChatId.fromId(update.message!!.chat.id), messageId = editMessageId)
                 }
             }
+
             "webm" -> {
                 try {
                     val outGif = toGif(stickerByteArray!!, ".webm")
                     bot.sendDocument(
                         chatId = ChatId.fromId(update.message!!.chat.id),
                         document = TelegramFile.ByByteArray(
-                            outGif!!,
-                            "${sticker.setName}-${(1000000..9999999).random()}.gifx"
+                            outGif!!, "${sticker.setName}-${(1000000..9999999).random()}.gifx"
                         ),
                         caption = LANG["gif_hint"],
                         replyToMessageId = update.message!!.messageId,

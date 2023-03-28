@@ -15,7 +15,7 @@ object NetUtils {
         header: Map<String, Any>? = null,
         args: List<Pair<String, String>>? = null
     ): String? {
-        if (withTor){
+        if (withTor) {
             val torAddress = InetSocketAddress("127.0.0.1", 9050)
             FuelManager.instance.proxy = Proxy(Proxy.Type.SOCKS, torAddress)
             FuelManager.instance.timeoutInMillisecond = 30_000
@@ -37,6 +37,7 @@ object NetUtils {
                 ex.printStackTrace()
                 null
             }
+
             is Result.Success -> {
                 result.get()
             }
@@ -59,6 +60,7 @@ object NetUtils {
                 ex.printStackTrace()
                 null
             }
+
             is Result.Success -> {
                 result.get()
             }

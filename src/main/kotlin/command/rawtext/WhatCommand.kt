@@ -17,6 +17,6 @@ fun whatCommand(bot: Bot, update: Update) {
                 deleteButton(update.message!!.messageId),
                 ParseMode.MARKDOWN
             )
-        }else return
-    }else return
+        } else return
+    } else return
 }

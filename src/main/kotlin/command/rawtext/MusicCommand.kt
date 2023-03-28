@@ -25,16 +25,16 @@ fun searchMusic(name: String): String? {
 
 fun musicCommand(bot: Bot, update: Update, args: List<String>) {
     val message = update.message!!
-    if (args.isNotEmpty()){
+    if (args.isNotEmpty()) {
         val editMessageId = message.replyToText(bot, update, LANG["finding"]!!)
         val music = args[0]
         val result = searchMusic(music)
-        if (result != null){
+        if (result != null) {
             message.edit(bot, editMessageId, result, result.generateUrlButton(LANG["music_button_hint"]!!))
-        }else{
+        } else {
             message.edit(bot, editMessageId, LANG["find_empty"]!!, deleteButton(messageId = message.messageId))
         }
-    }else{
+    } else {
         message.replyToText(bot, update, LANG["music_args_empty"]!!)
     }
 }

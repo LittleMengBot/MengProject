@@ -23,5 +23,5 @@ fun User.isChatMember(bot: Bot): Boolean {
 }
 
 fun User.fullName(): String {
-    return if(this.lastName != null) "${this.firstName} ${this.lastName}" else this.firstName
+    return if (this.lastName != null) "${this.firstName} ${this.lastName}" else this.firstName
 }

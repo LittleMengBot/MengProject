@@ -31,11 +31,13 @@ fun getAnimationCommand(bot: Bot, update: Update) {
                 document = message.replyToMessage!!.document!!
                 tempByteArray = bot.downloadFileBytes(document.fileId)
             }
+
             message.replyToMessage!!.animation != null -> {
                 editMessageId = message.replyToText(bot, update, LANG["getting"]!!)
                 animation = message.replyToMessage!!.animation!!
                 tempByteArray = bot.downloadFileBytes(animation.fileId)
             }
+
             else -> {
                 message.replyToText(bot, update, LANG["no_gif"]!!, deleteButton(messageId = message.messageId))
                 return
@@ -93,24 +95,25 @@ fun getAnimationCommand(bot: Bot, update: Update) {
     }
 }
 
-fun toGif(tempByteArray: ByteArray, suffix: String): ByteArray?{
+fun toGif(tempByteArray: ByteArray, suffix: String): ByteArray? {
     val vFile = FileUtils.convertToTemp(tempByteArray, "gif", suffix)
     val ffmpegStatus = Runtime.getRuntime().exec(
         "${configCache!!.ffmpeg_path} -i " +
-                "${vFile.absolutePath} ${vFile.absolutePath}.gif").execListener()!!
-    return if (ffmpegStatus.contains("Invalid")){
+                "${vFile.absolutePath} ${vFile.absolutePath}.gif"
+    ).execListener()!!
+    return if (ffmpegStatus.contains("Invalid")) {
         vFile.delete()
         null
-    }else{
+    } else {
         val ret = File("${vFile.absolutePath}.gif")
         val size = ret.length()
         try {
-            if (size < 20971520){
+            if (size < 20971520) {
                 Files.readAllBytes(ret.toPath())
-            }else{
+            } else {
                 null
             }
-        }finally {
+        } finally {
             ret.delete()
             vFile.delete()
         }

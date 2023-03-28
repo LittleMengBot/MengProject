@@ -49,11 +49,13 @@ object PeopleCommand {
                 withSelf = LANG["zouzou_self"]!!
                 withPeople = LANG["zouzou_with"]!!
             }
+
             command.startsWith("/momo") -> {
                 noReply = LANG["momo_no_reply"]!!
                 withSelf = LANG["momo_self"]!!
                 withPeople = LANG["momo_with"]!!
             }
+
             else -> return
         }
         val message = update.message
@@ -84,8 +86,9 @@ object PeopleCommand {
                 update.message!!.replyToText(
                     bot, update, withPeople.format(
                         myId, myName, peopleId, peopleName,
-                        momo_seed_letter.random(), peopleId, peopleName, momo_seed_text.random()),
-                        deleteButton(update.message!!.messageId), ParseMode.HTML
+                        momo_seed_letter.random(), peopleId, peopleName, momo_seed_text.random()
+                    ),
+                    deleteButton(update.message!!.messageId), ParseMode.HTML
                 )
             }
         }

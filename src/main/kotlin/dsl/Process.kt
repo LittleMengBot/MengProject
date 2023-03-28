@@ -5,7 +5,7 @@ import java.io.IOException
 import java.io.InputStreamReader
 
 fun Process.execListener(): String? {
-    return try{
+    return try {
         val bf = BufferedReader(InputStreamReader(this.inputStream))
         var line: String?
         val sb = StringBuilder()
@@ -13,7 +13,7 @@ fun Process.execListener(): String? {
             sb.append(line)
         }
         sb.toString()
-    }catch (e: IOException){
+    } catch (e: IOException) {
         e.printStackTrace()
         null
     }

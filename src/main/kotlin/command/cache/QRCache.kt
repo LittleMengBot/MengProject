@@ -5,7 +5,7 @@ import com.google.zxing.MultiFormatWriter
 
 object QRCache {
 
-    var formatReader:MultiFormatReader? = null
+    var formatReader: MultiFormatReader? = null
     var formatWriter: MultiFormatWriter? = null
 
     fun init(): Boolean {
