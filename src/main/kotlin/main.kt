@@ -26,8 +26,8 @@ import io.ktor.server.netty.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
 
@@ -36,7 +36,6 @@ fun init(): Boolean {
     return EnvironmentStatus.check()
 }
 
-@DelicateCoroutinesApi
 fun main() {
 
     if (!init()) {
@@ -56,35 +55,50 @@ fun main() {
 
         dispatch {
             command("start") { startCommand(bot, this.update) }
-            command("help") { GlobalScope.launch { helpCommand(bot, this@command.update) } }
+            command("help") { helpCommand(bot, this@command.update) }
             command("dream") { dreamCommand(bot, this.update) }
-            command("xi") { GlobalScope.launch { getSpeechByteArray(bot, update, args) } }
+            command("xi") { CoroutineScope(Dispatchers.IO).launch { getSpeechByteArray(bot, update, args) } }
             command("del") { deleteCommand(bot, this.update) }
             command("send") { sendCommand(bot, this.update) }
             command("chongkai") { remakeCommand(bot, this.update) }
             command("remake") { remakeCommand(bot, this.update) }
-            command("search") { GlobalScope.launch { searchCommand(bot, this@command.update) } }
+            command("search") { CoroutineScope(Dispatchers.IO).launch { searchCommand(bot, this@command.update) } }
             command("music") { musicCommand(bot, this.update, args) }
-            command("download") { GlobalScope.launch { downloadCommand(bot, update, args) } }
-            command("xingzuo") { GlobalScope.launch { constellationCommand(bot, this@command.update, args) } }
-            command("shot") { GlobalScope.launch { shotCommand(bot, this@command.update, args) } }
-            command("wiki") { GlobalScope.launch { wikiCommand(bot, this@command.update, args) } }
-            command("huangli") { GlobalScope.launch { lunarCommand(bot, this@command.update) } }
-            command("meiguo") { GlobalScope.launch { meiguoCommand(bot, this@command.update) } }
-            command("india") { GlobalScope.launch { indiaCommand(bot, this@command.update) } }
-            command("gs") { GlobalScope.launch { getStickerCommand(bot, this@command.update) } }
-            command("getsticker") { GlobalScope.launch { getStickerCommand(bot, this@command.update) } }
-            command("gif") { GlobalScope.launch { getAnimationCommand(bot, this@command.update) } }
+            command("download") { CoroutineScope(Dispatchers.IO).launch { downloadCommand(bot, update, args) } }
+            command("xingzuo") {
+                CoroutineScope(Dispatchers.IO).launch {
+                    constellationCommand(
+                        bot,
+                        this@command.update,
+                        args
+                    )
+                }
+            }
+            command("shot") { CoroutineScope(Dispatchers.IO).launch { shotCommand(bot, this@command.update, args) } }
+            command("wiki") { CoroutineScope(Dispatchers.IO).launch { wikiCommand(bot, this@command.update, args) } }
+            command("huangli") { CoroutineScope(Dispatchers.IO).launch { lunarCommand(bot, this@command.update) } }
+            command("meiguo") { CoroutineScope(Dispatchers.IO).launch { meiguoCommand(bot, this@command.update) } }
+            command("india") { CoroutineScope(Dispatchers.IO).launch { indiaCommand(bot, this@command.update) } }
+            command("gs") { CoroutineScope(Dispatchers.IO).launch { getStickerCommand(bot, this@command.update) } }
+            command("getsticker") {
+                CoroutineScope(Dispatchers.IO).launch {
+                    getStickerCommand(
+                        bot,
+                        this@command.update
+                    )
+                }
+            }
+            command("gif") { CoroutineScope(Dispatchers.IO).launch { getAnimationCommand(bot, this@command.update) } }
             command("toutou") { PeopleCommand.withCommand(bot, this.update, message.text!!) }
             command("tietie") { PeopleCommand.withCommand(bot, this.update, message.text!!) }
             command("zouzou") { PeopleCommand.withCommand(bot, this.update, message.text!!) }
             command("momo") { PeopleCommand.withCommand(bot, this.update, message.text!!) }
-            command("qr") { GlobalScope.launch { qrCommand(bot, this@command.update, args) } }
+            command("qr") { CoroutineScope(Dispatchers.IO).launch { qrCommand(bot, this@command.update, args) } }
             command("replace") { replaceCommand(bot, this@command.update, args) }
             command("b") { cryptoCommand(bot, this@command.update, args) }
             command("what") { whatCommand(bot, this@command.update) }
 
-            callbackQuery { GlobalScope.launch { callbackMethod(bot, this@callbackQuery.update) } }
+            callbackQuery { CoroutineScope(Dispatchers.IO).launch { callbackMethod(bot, this@callbackQuery.update) } }
 
             telegramError {
                 println(error.getErrorMessage())

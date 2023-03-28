@@ -37,7 +37,6 @@ fun checkUrl(url: String?): Boolean {
     return url?.matches("[a-zA-z]+://[^\\s]*".toRegex()) ?: false
 }
 
-@DelicateCoroutinesApi
 suspend fun shotCommand(bot: Bot, update: Update, args: List<String>) {
     val message = update.message!!
 
@@ -78,7 +77,7 @@ suspend fun shotCommand(bot: Bot, update: Update, args: List<String>) {
     if (!StatusLock.checkLock(lockCode)) {
         StatusLock.lock(lockCode)
     } else {
-        GlobalScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val cacheInMessageId: Long = message.replyToText(bot, update, LANG["lock_true"]!!)
             delay(5000L)
             bot.deleteMessage(chatId = ChatId.fromId(update.message!!.chat.id), messageId = cacheInMessageId)

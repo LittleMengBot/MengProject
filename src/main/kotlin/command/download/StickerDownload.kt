@@ -10,15 +10,14 @@ import command.cache.StatusLock
 import dsl.edit
 import dsl.replyToText
 import jni.NativeBuilder
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 
-@DelicateCoroutinesApi
 fun getStickerCommand(bot: Bot, update: Update) {
     val message = update.message
 
@@ -29,7 +28,7 @@ fun getStickerCommand(bot: Bot, update: Update) {
         if (!StatusLock.checkLock(lockCode)) {
             StatusLock.lock(lockCode)
         } else {
-            GlobalScope.launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 val cacheInMessageId: Long = message.replyToText(bot, update, LANG["lock_true"]!!)
                 delay(5000L)
                 bot.deleteMessage(chatId = ChatId.fromId(update.message!!.chat.id), messageId = cacheInMessageId)

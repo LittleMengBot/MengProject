@@ -1,44 +1,44 @@
 plugins {
-  id 'java'
-  id 'java-library'
+    id 'java'
+    id 'java-library'
 }
 
 tasks.register('wrapper', Wrapper) {
-  gradleVersion = '6.8'
+    gradleVersion = '6.8'
 }
 
 sourceSets {
-  main {
-    resources {
-      srcDirs "build/resources", "build/natives/lib"
+    main {
+        resources {
+            srcDirs "build/resources", "build/natives/lib"
+        }
     }
-  }
 }
 
 compileJava {
-  options.compilerArgs += ["-h", file("src/main/include")]
+    options.compilerArgs += ["-h", file("src/main/include")]
 }
 
 tasks.register('compileJNI') {
-  dependsOn compileJava
+    dependsOn compileJava
 
-  doLast {
-    exec {
-      commandLine './build.sh'
+    doLast {
+        exec {
+            commandLine './build.sh'
+        }
     }
-  }
 }
 
 clean.doFirst {
-  delete fileTree('src/main/include') {
-    include 'jni_*.h'
-  }
+    delete fileTree('src/main/include') {
+        include 'jni_*.h'
+    }
 }
 
 processResources {
-  dependsOn compileJNI
+    dependsOn compileJNI
 }
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }

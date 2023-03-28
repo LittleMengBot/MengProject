@@ -14,8 +14,8 @@ import command.net.NetUtils
 import dsl.edit
 import dsl.replyToText
 import file.FileUtils.convertToTemp
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import type.speech.AudioStatus
@@ -23,7 +23,6 @@ import type.speech.RequestStartType
 import type.speech.TaskStatus
 import java.util.*
 
-@DelicateCoroutinesApi
 suspend fun getAudioBytes(key: String): ByteArray? {
     val gsonParser = Gson()
     val header = mapOf("content-type" to "application/json")
@@ -50,7 +49,7 @@ suspend fun getAudioBytes(key: String): ByteArray? {
     return if (taskStatus.request_successful) {
         var requestId: String
         var audioJson: String?
-        val audioStatus: AudioStatus = GlobalScope.async {
+        val audioStatus: AudioStatus = CoroutineScope(Dispatchers.IO).async {
             delay(3000L)
             requestId = taskStatus.id
             audioJson =
@@ -64,7 +63,6 @@ suspend fun getAudioBytes(key: String): ByteArray? {
     } else null
 }
 
-@DelicateCoroutinesApi
 suspend fun getSpeechByteArray(bot: Bot, update: Update, args: List<String>) {
     val message = update.message!!
     var key: String? = null

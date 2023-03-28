@@ -11,8 +11,8 @@ import command.cache.StatusLock
 import dsl.edit
 import dsl.execListener
 import dsl.replyToText
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
@@ -107,7 +107,6 @@ fun checkUrl(url: String): Boolean {
     return (url.contains(Regex("[a-zA-z]+://[^\\s]*")))
 }
 
-@DelicateCoroutinesApi
 fun downloadCommand(bot: Bot, update: Update, args: List<String>) {
     val message = update.message!!
     var videoUrl: String? = null
@@ -132,7 +131,7 @@ fun downloadCommand(bot: Bot, update: Update, args: List<String>) {
         if (!StatusLock.checkLock(lockCode)) {
             StatusLock.lock(lockCode)
         } else {
-            GlobalScope.launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 val cacheInMessageId: Long = message.replyToText(bot, update, LANG["lock_true"]!!)
                 delay(5000L)
                 bot.deleteMessage(chatId = ChatId.fromId(update.message!!.chat.id), messageId = cacheInMessageId)

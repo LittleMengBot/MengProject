@@ -12,5 +12,6 @@ public class NativeBuilder {
     }
 
     public native String generateGif(String tgsPath);
+
     public native byte[] generatePNGFromWebP(byte[] webp, int webp_size);
 }
