@@ -6,7 +6,6 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.entities.Update
-import com.github.kotlintelegrambot.network.fold
 import com.nlf.calendar.Solar
 import java.util.*
 
@@ -42,7 +41,7 @@ object LunarCommand {
         ).fold({
 
         }, {
-            println(it.errorBody)
+            println(it.toString())
         })
 //    update.message!!.replyToText(bot, update, lunarInfo(), deleteButton(update.message!!.messageId), ParseMode.HTML)
     }

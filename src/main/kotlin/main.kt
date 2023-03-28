@@ -19,13 +19,14 @@ import command.net.shotCommand
 import command.rawtext.*
 import command.rawtext.LunarCommand.lunarCommand
 import envirenment.EnvironmentStatus
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
@@ -35,6 +36,7 @@ fun init(): Boolean {
     return EnvironmentStatus.check()
 }
 
+@DelicateCoroutinesApi
 fun main() {
 
     if (!init()) {

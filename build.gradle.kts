@@ -18,14 +18,17 @@ dependencies {
     // jni
     implementation(project(":jni"))
 
+    // gson
+    implementation(group = "com.google.code.gson", name = "gson", version = "2.10.1")
+
     // main
-    implementation( group = "io.github.kotlin-telegram-bot.kotlin-telegram-bot", name = "telegram", version = "6.0.6")
+    implementation(group = "io.github.kotlin-telegram-bot.kotlin-telegram-bot", name = "telegram", version = "6.0.7")
     // webhook
-    implementation(group = "io.ktor", name = "ktor-server-netty", version = "1.2.6" )
+    implementation(group = "io.ktor", name = "ktor-server-netty", version = "2.2.4")
 
 
     // api and net
-    implementation( group = "com.github.kittinunf.fuel", name = "fuel", version = "2.3.1")
+    implementation(group = "com.github.kittinunf.fuel", name = "fuel", version = "2.3.1")
 
     // multi-task
     implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.4.2")
@@ -37,15 +40,14 @@ dependencies {
     implementation(group = "com.squareup.moshi", name = "moshi-kotlin", version = "1.12.0")
 
     // html parse
-    implementation (group = "org.jsoup", name = "jsoup", version = "1.13.1")
+    implementation(group = "org.jsoup", name = "jsoup", version = "1.15.3")
 
     // shot
-    implementation (group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.0.0-beta-4")
+    implementation(group = "org.seleniumhq.selenium", name = "selenium-java", version = "4.8.3")
 
     // qrcode
     implementation(group = "com.google.zxing", name = "core", version = "3.4.1")
     implementation(group = "com.google.zxing", name = "javase", version = "3.4.1")
-
 
 
 }

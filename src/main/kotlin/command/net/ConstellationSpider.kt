@@ -58,20 +58,23 @@ fun constellationStatus(constellation: String): String? {
 
         try {
             val page = NetUtils.sendGet(url, withTor = true, header = header) // 墙内网站请使用Tor访问
-            val document = Jsoup.parse(page)
-            val s = document.select("span")
-            val totalStar = getStar(s[3].select("em").attr("style")) // 综合运势星星
-            val loveStar = getStar(s[4].select("em").attr("style")) // 爱情运势星星
-            val workStar = getStar(s[5].select("em").attr("style"))  // 事业运势星星
-            val worthStar = getStar(s[6].select("em").attr("style"))  // 事业运势星星
+            val document = page?.let { Jsoup.parse(it) }
+            if (document != null){
+                val s = document.select("span")
+                val totalStar = getStar(s[3].select("em").attr("style")) // 综合运势星星
+                val loveStar = getStar(s[4].select("em").attr("style")) // 爱情运势星星
+                val workStar = getStar(s[5].select("em").attr("style"))  // 事业运势星星
+                val worthStar = getStar(s[6].select("em").attr("style"))  // 事业运势星星
 
-            val total = parseFortune(s[7].text())
-            val love = parseFortune(s[8].text())
-            val work = parseFortune(s[9].text())
-            val worth = parseFortune(s[10].text())
-            val health = parseFortune(s[11].text())
-            return LANG["constellation_fmt"]!!.format(today, constellation, totalStar, total, loveStar, love, workStar, work,
-                worthStar, worth, health)
+                val total = parseFortune(s[7].text())
+                val love = parseFortune(s[8].text())
+                val work = parseFortune(s[9].text())
+                val worth = parseFortune(s[10].text())
+                val health = parseFortune(s[11].text())
+                return LANG["constellation_fmt"]!!.format(today, constellation, totalStar, total, loveStar, love, workStar, work,
+                    worthStar, worth, health)
+            }
+            else return null
         }catch (e: Exception){
             e.printStackTrace()
             return null

@@ -16,7 +16,7 @@ fun Message.replyToText(
         chatId = ChatId.fromId(this.chat.id), text = text,
         replyToMessageId = update.message!!.messageId, replyMarkup = replyMarkup, parseMode = parseMode
     ).fold({
-        currentMessageId = it!!.result!!.messageId
+        currentMessageId = it.messageId
     }, {
         currentMessageId = 0
     })

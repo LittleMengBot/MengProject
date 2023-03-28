@@ -3,7 +3,7 @@ plugins {
   id 'java-library'
 }
 
-task wrapper(type: Wrapper) {
+tasks.register('wrapper', Wrapper) {
   gradleVersion = '6.8'
 }
 
@@ -19,12 +19,12 @@ compileJava {
   options.compilerArgs += ["-h", file("src/main/include")]
 }
 
-task compileJNI {
+tasks.register('compileJNI') {
   dependsOn compileJava
 
   doLast {
     exec {
-      commandLine 'sh', '-c', 'mkdir -p build/natives && cd build/natives && cmake ../.. && make'
+      commandLine './build.sh'
     }
   }
 }
