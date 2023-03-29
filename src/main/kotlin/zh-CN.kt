@@ -29,7 +29,7 @@ val LANG: MutableMap<String, String> = mutableMapOf(
     "process_error" to "处理失败了。。。",
     "converting" to "正在转换格式...",
     "convert_failed" to "转换失败...",
-    "lock_true" to "已在处理，请稍后。（此消息五秒后自毁。）",
+    "lock_true" to "已有一个任务，请稍后。（此消息五秒后自毁。）",
     "no_sticker" to "请回复一张贴纸哦～",
     "no_gif" to "请回复一张Gif哦～\n\n（温馨提示：动态贴纸请使用/gs命令下载。）",
     "gif_hint" to "telegram不资瓷以文件类型发送gif，请自行将后缀更改为.gif",

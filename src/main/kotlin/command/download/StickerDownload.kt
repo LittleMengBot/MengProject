@@ -26,7 +26,7 @@ fun getStickerCommand(bot: Bot, update: Update) {
 
     if (message!!.replyToMessage != null && message.replyToMessage!!.sticker != null) {
         val sticker = message.replyToMessage!!.sticker!!
-        val lockCode = StatusLock.generateLock(message.from!!.id, "StickerDownload", listOf(sticker.fileId))
+        val lockCode = StatusLock.generateLock(message.from!!.id, "StickerDownload")
 
         if (!StatusLock.checkLock(lockCode)) {
             StatusLock.lock(lockCode)
