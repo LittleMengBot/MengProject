@@ -17,7 +17,7 @@ import command.net.constellationCommand
 import command.net.searchCommand
 import command.net.shotCommand
 import command.rawtext.*
-import command.rawtext.LunarCommand.lunarCommand
+import command.rawtext.LunarCommand.lunarHandler
 import envirenment.EnvironmentStatus
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -76,7 +76,7 @@ fun main() {
             }
             command("shot") { CoroutineScope(Dispatchers.IO).launch { shotCommand(bot, this@command.update, args) } }
             command("wiki") { CoroutineScope(Dispatchers.IO).launch { wikiCommand(bot, this@command.update, args) } }
-            command("huangli") { CoroutineScope(Dispatchers.IO).launch { lunarCommand(bot, this@command.update) } }
+            command("huangli") { CoroutineScope(Dispatchers.IO).launch { lunarHandler(bot, this@command.update) } }
             command("meiguo") { CoroutineScope(Dispatchers.IO).launch { meiguoCommand(bot, this@command.update) } }
             command("india") { CoroutineScope(Dispatchers.IO).launch { indiaCommand(bot, this@command.update) } }
             command("gs") { CoroutineScope(Dispatchers.IO).launch { getStickerCommand(bot, this@command.update) } }
