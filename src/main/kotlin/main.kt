@@ -19,13 +19,6 @@ import command.net.shotCommand
 import command.rawtext.*
 import command.rawtext.LunarCommand.lunarHandler
 import envirenment.EnvironmentStatus
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -106,25 +99,6 @@ fun main() {
         }
     }
 
-//    bot.startPolling()
+    bot.startPolling()
 
-    bot.startWebhook()
-
-//    Please use nginx proxy_pass to hold the webhook post.
-    val env = applicationEngineEnvironment {
-        module {
-            routing {
-                post("/${configCache!!.bot_token}") {
-                    val response = call.receiveText()
-                    bot.processUpdate(response)
-                    call.respond(HttpStatusCode.OK)
-                }
-            }
-        }
-        connector {
-            port = configCache!!.webhook_proxy_port
-        }
-    }
-
-    embeddedServer(Netty, env).start(wait = true)
 }
