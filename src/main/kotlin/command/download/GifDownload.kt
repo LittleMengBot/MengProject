@@ -13,10 +13,12 @@ import dsl.edit
 import dsl.execListener
 import dsl.replyToText
 import file.FileUtils
+import mu.KotlinLogging
 import java.io.File
+import java.io.IOException
 import java.nio.file.Files
 
-
+private val logger = KotlinLogging.logger {}
 fun getAnimationCommand(bot: Bot, update: Update) {
     val message = update.message
     var animation: Animation? = null
@@ -113,6 +115,9 @@ fun toGif(tempByteArray: ByteArray, suffix: String): ByteArray? {
             } else {
                 null
             }
+        } catch (e: IOException) {
+            logger.error(e.toString())
+            null
         } finally {
             ret.delete()
             vFile.delete()

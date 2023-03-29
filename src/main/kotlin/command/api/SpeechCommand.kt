@@ -8,6 +8,7 @@ import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.TelegramFile
 import com.github.kotlintelegrambot.entities.Update
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import command.net.NetUtils
@@ -18,11 +19,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import mu.KotlinLogging
 import type.speech.AudioStatus
 import type.speech.RequestStartType
 import type.speech.TaskStatus
 import java.util.*
 
+private val logger = KotlinLogging.logger {}
 suspend fun getAudioBytes(key: String): ByteArray? {
     val gsonParser = Gson()
     val header = mapOf("content-type" to "application/json")
@@ -42,7 +45,8 @@ suspend fun getAudioBytes(key: String): ByteArray? {
             requestJson = requestJson
         )
         taskStatus = gsonParser.fromJson(r, TaskStatus::class.java)
-    } catch (e: Exception) {
+    } catch (e: JsonSyntaxException) {
+        logger.error(e.toString())
         return null
     }
 

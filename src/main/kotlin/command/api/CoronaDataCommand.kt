@@ -6,13 +6,16 @@ import callback.deleteButton
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.Update
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import command.net.NetUtils
 import dsl.edit
 import dsl.replyToText
+import mu.KotlinLogging
 import type.corona.CoronaData
 import java.text.SimpleDateFormat
 import java.util.*
 
+private val logger = KotlinLogging.logger {}
 fun getCoronaData(country: String): String {
     val calendar = Calendar.getInstance(Locale.CHINA)
     val time = calendar.time
@@ -67,8 +70,8 @@ fun getCoronaData(country: String): String {
             nowDay, nowHour, nowMinute, total.toString().substring(0, 4),
             total, totalDeath.toString().substring(0, 2), totalDeath, newCase, newDeath
         )
-    } catch (e: Exception) {
-        e.printStackTrace()
+    } catch (e: JsonSyntaxException) {
+        logger.error(e.toString())
         return ""
     }
 }
@@ -77,13 +80,13 @@ fun meiguoCommand(bot: Bot, update: Update) {
     val message = update.message!!
 
     val editMessageId: Long = message.replyToText(bot, update, LANG["getting"]!!)
-    try {
-        val coronaData = getCoronaData("usa")
+    val coronaData = getCoronaData("usa")
+    if (coronaData != "") {
         update.message!!.edit(bot, editMessageId, coronaData, deleteButton(message.messageId))
-    } catch (e: Exception) {
-        e.printStackTrace()
+    } else {
         update.message!!.edit(bot, editMessageId, LANG["find_empty"]!!, deleteButton(message.messageId))
     }
+
 
 }
 
@@ -91,11 +94,10 @@ fun indiaCommand(bot: Bot, update: Update) {
     val message = update.message!!
 
     val editMessageId: Long = message.replyToText(bot, update, LANG["getting"]!!)
-    try {
-        val coronaData = getCoronaData("india")
+    val coronaData = getCoronaData("india")
+    if (coronaData != "") {
         update.message!!.edit(bot, editMessageId, coronaData, deleteButton(message.messageId))
-    } catch (e: Exception) {
-        e.printStackTrace()
+    } else {
         update.message!!.edit(bot, editMessageId, LANG["find_empty"]!!, deleteButton(message.messageId))
     }
 

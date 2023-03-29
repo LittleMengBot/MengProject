@@ -3,7 +3,9 @@ package dsl
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.*
 import com.github.kotlintelegrambot.network.fold
+import mu.KotlinLogging
 
+private val logger = KotlinLogging.logger {}
 fun Message.replyToText(
     bot: Bot,
     update: Update,
@@ -18,6 +20,7 @@ fun Message.replyToText(
     ).fold({
         currentMessageId = it.messageId
     }, {
+        logger.error(it.toString())
         currentMessageId = 0
     })
     return currentMessageId
@@ -34,19 +37,15 @@ fun Message.edit(
         chatId = ChatId.fromId(this.chat.id), messageId = editId, text = text,
         replyMarkup = replyMarkup, parseMode = parseMode
     ).fold({ }, {
-        println(it.errorBody.toString())
+        logger.error(it.errorBody.toString())
     }
     )
 }
 
 fun Message.delete(bot: Bot) {
-    try {
-        bot.deleteMessage(
-            chatId = ChatId.fromId(this.chat.id),
-            messageId = this.messageId
-        )
-    } catch (e: Exception) {
-        e.printStackTrace()
+    val result = bot.deleteMessage(chatId = ChatId.fromId(this.chat.id), messageId = this.messageId)
+    if (result.isError) {
+        logger.error("Message delete error! ")
     }
 }
 

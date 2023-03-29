@@ -8,5 +8,4 @@ import dsl.replyToText
 
 fun startCommand(bot: Bot, update: Update) {
     update.message!!.replyToText(bot, update, LANG["start_command"]!!, deleteButton(update.message!!.messageId))
-
 }

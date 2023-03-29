@@ -4,8 +4,11 @@ import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
+import mu.KotlinLogging
 import java.net.InetSocketAddress
 import java.net.Proxy
+
+private val logger = KotlinLogging.logger {}
 
 object NetUtils {
     fun sendGet(
@@ -33,8 +36,7 @@ object NetUtils {
         return when (result) {
             is Result.Failure -> {
                 val ex = result.getException()
-                println(result.error)
-                ex.printStackTrace()
+                logger.error(ex.toString())
                 null
             }
 
@@ -57,7 +59,7 @@ object NetUtils {
         return when (result) {
             is Result.Failure -> {
                 val ex = result.getException()
-                ex.printStackTrace()
+                logger.error(ex.toString())
                 null
             }
 

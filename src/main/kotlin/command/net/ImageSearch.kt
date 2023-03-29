@@ -10,9 +10,10 @@ import com.github.kotlintelegrambot.entities.files.PhotoSize
 import com.github.kotlintelegrambot.network.fold
 import dsl.edit
 import dsl.replyToText
+import mu.KotlinLogging
 import org.jsoup.Jsoup
 
-
+private val logger = KotlinLogging.logger {}
 fun searchImageByUrl(imageUrl: String): List<Pair<String, String>> {
     val baseUrl = "https://www.google.com/"
     val header = mapOf("User-Agent" to "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:61.0) Gecko/20100101 Firefox/89.0")
@@ -57,7 +58,7 @@ fun searchCommand(bot: Bot, update: Update) {
         photoFile.fold({
             photoUrl = LANG["file_base_url"]!!.format(configCache!!.bot_token, it!!.result!!.filePath)
         }, {
-            it.exception?.printStackTrace()
+            logger.error(it.exception?.toString())
         })
 
         if (photoUrl != null) {

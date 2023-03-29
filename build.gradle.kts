@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "1.8.0"
     application
 }
 
@@ -14,6 +14,12 @@ repositories {
 }
 
 dependencies {
+
+    // logger
+    implementation(group = "io.github.microutils", name = "kotlin-logging-jvm", version = "3.0.5")
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+    implementation("org.slf4j:slf4j-simple:2.0.7")
+
 
     // jni
     implementation(project(":jni"))
@@ -69,6 +75,7 @@ tasks.jar {
     val sourcesMain = sourceSets.main.get()
     sourcesMain.allSource.forEach { println("add from sources: ${it.name}") }
     from(sourcesMain.output)
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 application {

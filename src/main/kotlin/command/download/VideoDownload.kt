@@ -15,8 +15,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import mu.KotlinLogging
 import java.io.File
+import java.io.IOException
 
+private val logger = KotlinLogging.logger {}
 
 fun searchFile(file: File): String? {
     val fileList = File(file.parent).list()!!   //断言非空
@@ -33,73 +36,75 @@ fun downloadVideo(videoUrl: String): String? {
     val result = Runtime.getRuntime().exec(cmd).execListener()
     val re = Regex("(\\d* \\wytes)")
     var videoByte: Int
-
-    result?.let {
-        if (!it.contains("[rror]") && result != "") {
-            try {
+    try {
+        result?.let {
+            if (!it.contains("[rror]") && result != "") {
                 videoByte = re.findAll(it).toList()[0].value.split(" ")[0].toInt()
-            } finally {
-            }
-            // 判断视频是否小于20MB，20971520 = 20 * 20 * 1024
-            if (videoByte < 20971520) {
-                println("video < 20MB")
-                val tempFile = File.createTempFile("video", "")
-                Runtime.getRuntime().exec(
-                    "${configCache!!.youget_path} --no-caption " +
-                            "-o ${tempFile.parent}/ " +
-                            "-O ${tempFile.name} $videoUrl"
-                ).waitFor()
-                val videoFile = (searchFile(tempFile))
-                if (videoFile != null) {
-                    val video = File("${tempFile.parent}/$videoFile")
-                    if (videoFile.endsWith(".mp4")) {
-                        try {
-                            return video.absolutePath
-                        } finally {
-                            tempFile.delete()
-                        }
-                    } else {
-                        return if (videoFile.endsWith(".flv")) {
-                            val ffmpegStatus = Runtime.getRuntime().exec(
-                                "${configCache!!.ffmpeg_path} -i " +
-                                        "${video.absolutePath} ${video.absolutePath}.mp4"
-                            ).execListener()!!
-                            if (!ffmpegStatus.contains("Invalid")) {
-                                return try {
-                                    val ret = File("${video.absolutePath}.mp4")
-                                    val size = ret.length()
-                                    if (size < 20971520) {
-                                        ret.absolutePath
-                                    } else {
-                                        ret.delete()
-                                        null
-                                    }
-                                } finally {
-                                    video.delete()
-                                    tempFile.delete()
-                                }
-                            } else {
-                                tempFile.delete()
-                                null
-                            }
-                        } else {
-                            return try {
-                                video.absolutePath
+                // 判断视频是否小于20MB，20971520 = 20 * 20 * 1024
+                if (videoByte < 20971520) {
+                    println("video < 20MB")
+                    val tempFile = File.createTempFile("video", "")
+                    Runtime.getRuntime().exec(
+                        "${configCache!!.youget_path} --no-caption " +
+                                "-o ${tempFile.parent}/ " +
+                                "-O ${tempFile.name} $videoUrl"
+                    ).waitFor()
+                    val videoFile = (searchFile(tempFile))
+                    if (videoFile != null) {
+                        val video = File("${tempFile.parent}/$videoFile")
+                        if (videoFile.endsWith(".mp4")) {
+                            try {
+                                return video.absolutePath
                             } finally {
                                 tempFile.delete()
                             }
+                        } else {
+                            return if (videoFile.endsWith(".flv")) {
+                                val ffmpegStatus = Runtime.getRuntime().exec(
+                                    "${configCache!!.ffmpeg_path} -i " +
+                                            "${video.absolutePath} ${video.absolutePath}.mp4"
+                                ).execListener()!!
+                                if (!ffmpegStatus.contains("Invalid")) {
+                                    return try {
+                                        val ret = File("${video.absolutePath}.mp4")
+                                        val size = ret.length()
+                                        if (size < 20971520) {
+                                            ret.absolutePath
+                                        } else {
+                                            ret.delete()
+                                            null
+                                        }
+                                    } finally {
+                                        video.delete()
+                                        tempFile.delete()
+                                    }
+                                } else {
+                                    tempFile.delete()
+                                    null
+                                }
+                            } else {
+                                return try {
+                                    video.absolutePath
+                                } finally {
+                                    tempFile.delete()
+                                }
+                            }
                         }
                     }
+                    tempFile.delete()
+                    return null
+                } else {
+                    return null
                 }
-                tempFile.delete()
-                return null
             } else {
                 return null
             }
-        } else {
-            return null
         }
+    } catch (e: IOException) {
+        logger.error(e.toString())
+        return null
     }
+
     return null
 }
 

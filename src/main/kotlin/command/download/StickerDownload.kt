@@ -14,10 +14,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import mu.KotlinLogging
 import java.io.File
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
 
+private val logger = KotlinLogging.logger {}
 fun getStickerCommand(bot: Bot, update: Update) {
     val message = update.message
 
@@ -69,8 +72,8 @@ fun getStickerCommand(bot: Bot, update: Update) {
                         replyToMessageId = message.messageId
                     )
                     bot.deleteMessage(chatId = ChatId.fromId(update.message!!.chat.id), messageId = editMessageId)
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                } catch (e: IOException) {
+                    logger.error(e.toString())
                     message.edit(bot, editMessageId, LANG["process_error"]!!)
                 } finally {
                     StatusLock.freeze(lockCode)
@@ -91,8 +94,8 @@ fun getStickerCommand(bot: Bot, update: Update) {
                         replyToMessageId = update.message!!.messageId,
                         replyMarkup = deleteButton(update.message!!.messageId)
                     )
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                } catch (e: IOException) {
+                    logger.error(e.toString())
                     message.edit(bot, editMessageId, LANG["process_error"]!!)
                 } finally {
                     StatusLock.freeze(lockCode)
@@ -112,8 +115,8 @@ fun getStickerCommand(bot: Bot, update: Update) {
                         replyToMessageId = update.message!!.messageId,
                         replyMarkup = deleteButton(update.message!!.messageId)
                     )
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                } catch (e: IOException) {
+                    logger.error(e.toString())
                     message.edit(bot, editMessageId, LANG["process_error"]!!)
                 } finally {
                     StatusLock.freeze(lockCode)

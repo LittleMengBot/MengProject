@@ -7,7 +7,10 @@ import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.entities.Update
 import com.nlf.calendar.Solar
+import mu.KotlinLogging
 import java.util.*
+
+private val logger = KotlinLogging.logger {}
 
 object LunarCommand {
     private fun lunarInfo(): String {
@@ -30,7 +33,7 @@ object LunarCommand {
         return result
     }
 
-    fun lunarCommand(bot: Bot, update: Update) {
+    fun lunarHandler(bot: Bot, update: Update) {
 //        println(lunarInfo())
         bot.sendMessage(
             chatId = ChatId.fromId(update.message!!.chat.id),
@@ -38,11 +41,8 @@ object LunarCommand {
             replyToMessageId = update.message!!.messageId,
             replyMarkup = deleteButton(update.message!!.messageId),
             parseMode = ParseMode.HTML
-        ).fold({
-
-        }, {
-            println(it.toString())
+        ).fold({}, {
+            logger.error(it.toString())
         })
-//    update.message!!.replyToText(bot, update, lunarInfo(), deleteButton(update.message!!.messageId), ParseMode.HTML)
     }
 }

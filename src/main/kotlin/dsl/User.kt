@@ -4,7 +4,9 @@ import ConfigLoader.configCache
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.User
+import mu.KotlinLogging
 
+private val logger = KotlinLogging.logger {}
 fun User.isAdmin(): Boolean {
     return configCache!!.admin_id.contains(this.id)
 }
@@ -17,6 +19,7 @@ fun User.isChatMember(bot: Bot): Boolean {
                 check = true
             }
         }, {
+            logger.error(it.toString())
             check = false
         })
     return check

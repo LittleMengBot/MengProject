@@ -6,12 +6,15 @@ import callback.deleteButton
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.Update
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import command.net.NetUtils
 import dsl.edit
 import dsl.replyToText
+import mu.KotlinLogging
 import type.crypto.CryptoInfo
 import java.util.*
 
+private val logger = KotlinLogging.logger {}
 fun getCryptoInfo(symbol: String): String {
     val headers = mapOf(
         "Accepts" to "application/json",
@@ -41,8 +44,8 @@ fun cryptoCommand(bot: Bot, update: Update, args: List<String>) {
     try {
         val cryptoData = getCryptoInfo(args[0].uppercase(Locale.getDefault()))
         update.message!!.edit(bot, editMessageId, cryptoData, deleteButton(message.messageId))
-    } catch (e: Exception) {
-        e.printStackTrace()
+    } catch (e: JsonSyntaxException) {
+        logger.error(e.toString())
         update.message!!.edit(bot, editMessageId, LANG["find_empty"]!!, deleteButton(message.messageId))
     }
 }

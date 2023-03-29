@@ -12,10 +12,13 @@ import command.cache.StatusLock
 import dsl.edit
 import dsl.replyToText
 import kotlinx.coroutines.*
+import mu.KotlinLogging
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.OutputType
+import org.openqa.selenium.WebDriverException
 import org.openqa.selenium.chrome.ChromeDriver
 
+private val logger = KotlinLogging.logger {}
 suspend fun shotWeb(url: String, w: Int, h: Int): ByteArray? {
     val driver: ChromeDriver = ChromeDriverCache.init() ?: return null
     driver.manage().window().size = Dimension(w, h)
@@ -24,13 +27,14 @@ suspend fun shotWeb(url: String, w: Int, h: Int): ByteArray? {
         delay(3000L)
     }
 
-    try {
-        return driver.getScreenshotAs(OutputType.BYTES)
+    return try {
+        driver.getScreenshotAs(OutputType.BYTES)
+    } catch (e: WebDriverException) {
+        logger.error(e.toString())
+        null
     } finally {
         driver.quit()
     }
-
-
 }
 
 fun checkUrl(url: String?): Boolean {
@@ -54,7 +58,8 @@ suspend fun shotCommand(bot: Bot, update: Update, args: List<String>) {
         try {
             w = args[0].toInt()
             h = args[1].toInt()
-        } catch (e: Exception) {
+        } catch (e: NumberFormatException) {
+            logger.error(e.toString())
             message.replyToText(bot, update, LANG["shot_args_error"]!!);return
         }
         if (w > 20000 || h > 20000 || w < 500 || h < 500) {

@@ -1,9 +1,11 @@
 package dsl
 
+import mu.KotlinLogging
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
+private val logger = KotlinLogging.logger {}
 fun Process.execListener(): String? {
     return try {
         val bf = BufferedReader(InputStreamReader(this.inputStream))
@@ -14,7 +16,7 @@ fun Process.execListener(): String? {
         }
         sb.toString()
     } catch (e: IOException) {
-        e.printStackTrace()
+        logger.error { "Runtime Error -> $e" }
         null
     }
 }

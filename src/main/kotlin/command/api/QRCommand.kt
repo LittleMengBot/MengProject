@@ -7,10 +7,7 @@ import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.entities.TelegramFile
 import com.github.kotlintelegrambot.entities.Update
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.BinaryBitmap
-import com.google.zxing.DecodeHintType
-import com.google.zxing.EncodeHintType
+import com.google.zxing.*
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource
 import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.common.GlobalHistogramBinarizer
@@ -18,13 +15,16 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import command.cache.QRCache.formatReader
 import command.cache.QRCache.formatWriter
 import dsl.replyToText
+import mu.KotlinLogging
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 import javax.imageio.ImageIO
 
-const val width = 250
-const val height = 250
-const val fmt = "png"
+private val logger = KotlinLogging.logger {}
+const val WIDTH = 250
+const val HEIGHT = 250
+const val FMT = "png"
 
 fun parseQR(imageBytes: ByteArray): String? {
     return try {
@@ -34,8 +34,11 @@ fun parseQR(imageBytes: ByteArray): String? {
         map[DecodeHintType.CHARACTER_SET] = "utf-8"
         val result = formatReader!!.decode(bitmap, map)
         result.text
-    } catch (e: Exception) {
-        e.printStackTrace()
+    } catch (e: IOException) {
+        logger.error(e.toString())
+        null
+    } catch (e: NotFoundException) {
+        logger.error(e.toString())
         null
     }
 }
@@ -47,12 +50,15 @@ fun generateQR(text: String): ByteArray? {
     map[EncodeHintType.MARGIN] = 2
 
     return try {
-        val bitMatrix = formatWriter!!.encode(text, BarcodeFormat.QR_CODE, width, height, map)
+        val bitMatrix = formatWriter!!.encode(text, BarcodeFormat.QR_CODE, WIDTH, HEIGHT, map)
         val bs = ByteArrayOutputStream()
-        MatrixToImageWriter.writeToStream(bitMatrix, fmt, bs)
+        MatrixToImageWriter.writeToStream(bitMatrix, FMT, bs)
         bs.toByteArray()
-    } catch (e: Exception) {
-        e.printStackTrace()
+    } catch (e: IOException) {
+        logger.error(e.toString())
+        null
+    } catch (e: WriterException) {
+        logger.error(e.toString())
         null
     }
 

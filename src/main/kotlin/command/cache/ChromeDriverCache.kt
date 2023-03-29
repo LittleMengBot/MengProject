@@ -1,7 +1,11 @@
 package command.cache
 
+import mu.KotlinLogging
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import java.io.IOException
+
+private val logger = KotlinLogging.logger {}
 
 object ChromeDriverCache {
 
@@ -15,9 +19,8 @@ object ChromeDriverCache {
         options.addArguments("--proxy-server=socks5://127.0.0.1:9050")
         return try {
             ChromeDriver(options)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            println("----------\nChrome Driver init failed.")
+        } catch (e: IOException) {
+            logger.error("----------\nChrome Driver init failed.$e")
             null
         }
     }

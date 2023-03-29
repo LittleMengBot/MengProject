@@ -1,9 +1,13 @@
 package command.cache
 
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import envirenment.EnvironmentStatus
+import mu.KotlinLogging
 import type.music.MusicType
 import java.io.File
+
+private val logger = KotlinLogging.logger {}
 
 object MusicCache {
 
@@ -14,8 +18,8 @@ object MusicCache {
         return try {
             musicListCache = Gson().fromJson(musicJson, MusicType::class.java)
             true
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (e: JsonSyntaxException) {
+            logger.error(e.toString())
             false
         }
     }
