@@ -38,7 +38,7 @@ suspend fun shotWeb(url: String, w: Int, h: Int): ByteArray? {
 }
 
 fun checkUrl(url: String?): Boolean {
-    return url?.matches("[a-zA-z]+://[^\\s]*".toRegex()) ?: false
+    return url?.matches("[a-zA-z]+://\\S*".toRegex()) ?: false
 }
 
 suspend fun shotCommand(bot: Bot, update: Update, args: List<String>) {
@@ -100,7 +100,7 @@ suspend fun shotCommand(bot: Bot, update: Update, args: List<String>) {
             replyMarkup = deleteButton(message.from!!.id)
         ).fold({}, {
             it.exception?.printStackTrace()
-            println(it.errorBody)
+            logger.error(it.errorBody.toString())
         })
         bot.deleteMessage(chatId = ChatId.fromId(message.chat.id), messageId = editMessageId)
         StatusLock.freeze(lockCode)

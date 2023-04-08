@@ -29,7 +29,10 @@ import io.ktor.server.routing.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import mu.KotlinLogging
 import kotlin.system.exitProcess
+
+private val logger = KotlinLogging.logger {}
 
 // ANTI WINDOWS AND FUCK MICROSOFT
 fun init(): Boolean {
@@ -101,7 +104,7 @@ fun main() {
             callbackQuery { CoroutineScope(Dispatchers.IO).launch { callbackMethod(bot, this@callbackQuery.update) } }
 
             telegramError {
-                println(error.getErrorMessage())
+                logger.error(error.getErrorMessage())
             }
         }
     }

@@ -10,7 +10,6 @@ import com.github.kotlintelegrambot.entities.Update
 import com.github.kotlintelegrambot.entities.files.Animation
 import com.github.kotlintelegrambot.entities.files.Document
 import dsl.edit
-import dsl.execListener
 import dsl.replyToText
 import file.FileUtils
 import mu.KotlinLogging
@@ -99,29 +98,51 @@ fun getAnimationCommand(bot: Bot, update: Update) {
 
 fun toGif(tempByteArray: ByteArray, suffix: String): ByteArray? {
     val vFile = FileUtils.convertToTemp(tempByteArray, "gif", suffix)
-    val ffmpegStatus = Runtime.getRuntime().exec(
-        "${configCache!!.ffmpeg_path} -i " +
-                "${vFile.absolutePath} ${vFile.absolutePath}.gif"
-    ).execListener()!!
-    return if (ffmpegStatus.contains("Invalid")) {
+    val ffmpegPath = configCache!!.ffmpeg_path // FFmpeg 路径
+
+    // 转换文件为 GIF 格式
+    val gifFile = convertFileToGif(vFile, ffmpegPath)
+    if (gifFile == null || !gifFile.exists()) {
         vFile.delete()
-        null
-    } else {
-        val ret = File("${vFile.absolutePath}.gif")
-        val size = ret.length()
-        try {
-            if (size < 20971520) {
-                Files.readAllBytes(ret.toPath())
-            } else {
-                null
-            }
-        } catch (e: IOException) {
-            logger.error(e.toString())
-            null
-        } finally {
-            ret.delete()
-            vFile.delete()
+        return null
+    }
+
+    // 读取 GIF 文件内容
+    val gifData = readFile(gifFile)
+    gifFile.delete()
+    vFile.delete()
+
+    return gifData
+}
+
+private fun convertFileToGif(sourceFile: File, ffmpegPath: String): File? {
+    val gifFile = File(sourceFile.absolutePath + ".gif")
+    val cmd = "$ffmpegPath -i ${sourceFile.absolutePath} ${gifFile.absolutePath}"
+
+    try {
+        val process = Runtime.getRuntime().exec(cmd)
+        process.waitFor()
+        if (process.exitValue() != 0) {
+            return null
         }
+        return gifFile
+    } catch (e: IOException) {
+        logger.error("Failed to execute FFmpeg: ${e.message}")
+        return null
+    } catch (e: InterruptedException) {
+        logger.error("FFmpeg execution interrupted: ${e.message}")
+        return null
     }
 }
 
+private fun readFile(file: File): ByteArray? {
+    if (!file.exists() || !file.isFile || file.length() > 20971520) {
+        return null
+    }
+    return try {
+        Files.readAllBytes(file.toPath())
+    } catch (e: IOException) {
+        logger.error("Failed to read file: ${e.message}")
+        null
+    }
+}

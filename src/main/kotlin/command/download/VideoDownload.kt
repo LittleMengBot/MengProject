@@ -42,7 +42,7 @@ fun downloadVideo(videoUrl: String): String? {
                 videoByte = re.findAll(it).toList()[0].value.split(" ")[0].toInt()
                 // 判断视频是否小于20MB，20971520 = 20 * 20 * 1024
                 if (videoByte < 20971520) {
-                    println("video < 20MB")
+                    logger.info("video < 20MB")
                     val tempFile = File.createTempFile("video", "")
                     Runtime.getRuntime().exec(
                         "${configCache!!.youget_path} --no-caption " +

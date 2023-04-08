@@ -34,7 +34,6 @@ object LunarCommand {
     }
 
     fun lunarHandler(bot: Bot, update: Update) {
-//        println(lunarInfo())
         bot.sendMessage(
             chatId = ChatId.fromId(update.message!!.chat.id),
             text = lunarInfo(),
