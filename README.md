@@ -27,6 +27,7 @@ Nginx
 {  
 "admin_id": [], 
 "bot_token": "",
+"handle_method":"",
 "group_id": ,
 "corona_headers": {
 "x-rapidapi-key": "",
@@ -45,6 +46,7 @@ Nginx
 
 - ``admin_id`` -> 管理员ID。
 - ``group_id`` -> 群组ID。
+- ``handle_method``:``webhook``或者``long_poll``。
 - ``bot_token`` -> 从 BotFather 处申请。
 - ``corona_headers`` -> 从[此处](https://rapidapi.com/api-sports/api/covid-193/)申请。
 - 更改``python3_path``、``youget_path``、``ffmpeg_path``为当前系统对应路径。
