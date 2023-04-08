@@ -41,6 +41,10 @@ object EnvironmentStatus {
                 logger.error("Please install ffmpeg and set the bin path in the Config File.");false
             }
 
+            !(configCache!!.handle_method == "webhook" || configCache!!.handle_method == "long_poll") -> {
+                logger.error("Handle method must be \"webhook\" or \"long_poll\".Please check the config file.");false
+            }
+
             else -> true
         }
     }

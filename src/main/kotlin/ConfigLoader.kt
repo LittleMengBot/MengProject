@@ -20,7 +20,7 @@ object ConfigLoader {
         } catch (e: IOException) {
             logger.error(e.toString())
             false
-        }catch (e:JsonSyntaxException){
+        } catch (e: JsonSyntaxException) {
             logger.error(e.toString())
             false
         }

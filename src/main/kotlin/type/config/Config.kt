@@ -3,6 +3,7 @@ package type.config
 data class Config(
     val admin_id: List<Long>,
     val bot_token: String,
+    val handle_method: String,
     val corona_headers: CoronaHeaders,
     val ffmpeg_path: String,
     val group_id: Long,

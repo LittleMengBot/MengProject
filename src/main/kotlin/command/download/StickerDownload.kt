@@ -15,10 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
-import java.io.File
 import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.Paths
 
 private val logger = KotlinLogging.logger {}
 fun getStickerCommand(bot: Bot, update: Update) {
@@ -45,27 +42,19 @@ fun getStickerCommand(bot: Bot, update: Update) {
 
         when (filePath.substring(filePath.length - 4, filePath.length)) {
             ".tgs" -> {
-                var tgsFileTemp: File? = null
-                var outFile: File? = null
                 try {
-                    tgsFileTemp = File.createTempFile("stickers", ".tgs")
-                    val tgsFileTempPath = Paths.get(tgsFileTemp.toURI())
-                    Files.write(tgsFileTempPath, stickerByteArray!!)
                     message.edit(bot, editMessageId, LANG["converting"]!!)
 
-                    val ofp = NativeBuilder().generateGif(tgsFileTemp.absolutePath)
-                    if (ofp == "") {
+                    val ofp = NativeBuilder().generateGif(stickerByteArray)
+                    if (ofp.isEmpty()) {
                         message.edit(bot, editMessageId, LANG["process_error"]!!);return
                     }
-                    outFile = File(NativeBuilder().generateGif(tgsFileTemp.absolutePath))
-
-
                     message.edit(bot, editMessageId, LANG["sending"]!!)
 
                     bot.sendDocument(
                         chatId = ChatId.fromId(update.message!!.chat.id),
                         document = TelegramFile.ByByteArray(
-                            outFile.readBytes(), "GIF-${(1000000..9999999).random()}.gifx"
+                            ofp, "GIF-${(1000000..9999999).random()}.gifx"
                         ),
                         caption = LANG["gif_hint"],
                         replyMarkup = deleteButton(update.message!!.messageId),
@@ -77,8 +66,6 @@ fun getStickerCommand(bot: Bot, update: Update) {
                     message.edit(bot, editMessageId, LANG["process_error"]!!)
                 } finally {
                     StatusLock.freeze(lockCode)
-                    tgsFileTemp?.delete()
-                    outFile?.delete()
                 }
             }
 
