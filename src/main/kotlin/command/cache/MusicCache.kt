@@ -6,6 +6,7 @@ import envirenment.EnvironmentStatus
 import mu.KotlinLogging
 import type.music.MusicType
 import java.io.File
+import java.io.IOException
 
 private val logger = KotlinLogging.logger {}
 
@@ -19,6 +20,9 @@ object MusicCache {
             musicListCache = Gson().fromJson(musicJson, MusicType::class.java)
             true
         } catch (e: JsonSyntaxException) {
+            logger.error(e.toString())
+            false
+        } catch (e: IOException) {
             logger.error(e.toString())
             false
         }
