@@ -13,8 +13,8 @@ object ConfigLoader {
     var configCache: Config? = null
 
     fun init(): Boolean {
-        val config = File(EnvironmentStatus.currentPath + "config.json").readText()
         return try {
+            val config = File(EnvironmentStatus.currentPath + "config.json").readText()
             configCache = Gson().fromJson(config, Config::class.java)
             true
         } catch (e: IOException) {
