@@ -4,6 +4,7 @@ import mu.KotlinLogging
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import java.io.IOException
+import java.lang.IllegalStateException
 
 private val logger = KotlinLogging.logger {}
 
@@ -22,7 +23,9 @@ object ChromeDriverCache {
         } catch (e: IOException) {
             logger.error("----------\nChrome Driver init failed.$e")
             null
+        } catch (e: IllegalStateException) {
+            logger.error("----------\nChrome Driver init failed.$e")
+            null
         }
     }
-
 }
